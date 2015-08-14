@@ -63,7 +63,7 @@
               <label class="control-label required-field">{% trans "Category" %}</label>
               {% autoescape off %}
               {% for choice in category_form.category_choice_field.field.choices %}
-              <div class="radio">
+              <div class="radio col-md-6">
                 <input type="radio" name="category_choice_field" value="{{ choice.0 }}"
                   {% ifequal category_form.initial choice.0 %} checked="checked" {% endifequal %}> 
                   {{ choice.1 }}
