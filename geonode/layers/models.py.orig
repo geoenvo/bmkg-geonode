@@ -36,8 +36,6 @@ from agon_ratings.models import OverallRating
 from geonode.utils import check_shp_columnnames
 from geonode.security.models import remove_object_permissions
 
-from icraf_dr.models import Main #^^
-
 logger = logging.getLogger("geonode.layers.models")
 
 shp_exts = ['.shp', ]
@@ -262,34 +260,12 @@ class UploadSession(models.Model):
 
 class LayerFile(models.Model):
 
-    def get_upload_path(instance, filename): #^^
-        main = Main.objects.get(pk=instance.main_id) #^^
-        
-        # default upload path
-        upload_path = 'uploaded/layers/%s' % filename #^^
-        
-        # custom icraf_dr upload path
-        upload_path = '{cat_alp}/{cov_alp}/{src_alp}/{year_num}/layers/{filename}'.format( #^^
-            cat_alp=main.category.cat_alp, #^^
-            cov_alp=main.coverage.cov_alp, #^^
-            src_alp=main.source.src_alp, #^^
-            year_num=str(main.year.year_num), #^^
-            filename=filename #^^
-        )
-        
-        return upload_path
-    
-    def __init__(self, *args, **kwargs): #^^
-        super(LayerFile, self).__init__(*args, **kwargs) #^^
-        self.main_id = None #^^
-    
     """Helper class to store original files.
     """
     upload_session = models.ForeignKey(UploadSession)
     name = models.CharField(max_length=255)
     base = models.BooleanField(default=False)
-    ##^ file = models.FileField(upload_to='layers', max_length=255)
-    file = models.FileField(upload_to=get_upload_path, max_length=255) #^^
+    file = models.FileField(upload_to='layers', max_length=255)
 
 
 class AttributeManager(models.Manager):

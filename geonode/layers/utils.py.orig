@@ -52,8 +52,6 @@ import tarfile
 
 from zipfile import ZipFile, is_zipfile
 
-from geonode.layers.models import LayerFile #^^
-
 logger = logging.getLogger('geonode.layers.utils')
 
 _separator = '\n' + ('-' * 100) + '\n'
@@ -357,7 +355,7 @@ def extract_tarfile(upload_file, extension='.shp', tempdir=None):
 
 def file_upload(filename, name=None, user=None, title=None, abstract=None,
                 keywords=[], category=None, regions=[],
-                skip=True, overwrite=False, charset='UTF-8', main_id=None): #^^
+                skip=True, overwrite=False, charset='UTF-8'):
     """Saves a layer in GeoNode asking as little information as possible.
        Only filename is required, user and title are optional.
     """
@@ -393,17 +391,8 @@ def file_upload(filename, name=None, user=None, title=None, abstract=None,
     assigned_name = None
     for type_name, fn in files.items():
         with open(fn, 'rb') as f:
-            if main_id != None: #^^
-                layerfile = LayerFile( #^^
-                    upload_session=upload_session, #^^
-                    name=type_name, #^^
-                    file=File(f, name='%s.%s' % (assigned_name or valid_name, type_name)) #^^
-                ) #^^
-                layerfile.main_id = main_id #^^
-                layerfile.save() #^^
-            else: #^^
-                upload_session.layerfile_set.create(name=type_name,
-                                                    file=File(f, name='%s.%s' % (assigned_name or valid_name, type_name)))
+            upload_session.layerfile_set.create(name=type_name,
+                                                file=File(f, name='%s.%s' % (assigned_name or valid_name, type_name)))
             # save the system assigned name for the remaining files
             if not assigned_name:
                 the_file = upload_session.layerfile_set.all()[0].file.name

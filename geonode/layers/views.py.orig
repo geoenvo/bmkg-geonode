@@ -58,8 +58,6 @@ from geonode.documents.models import get_related_documents
 from geonode.utils import build_social_links
 from geonode.geoserver.helpers import cascading_delete, gs_catalog
 
-from icraf_dr.models import Category, Coverage, Source, Year, Main #^^
-
 CONTEXT_LOG_FILE = None
 
 if 'geonode.geoserver' in settings.INSTALLED_APPS:
@@ -125,21 +123,7 @@ def _resolve_layer(request, typename, permission='base.view_resourcebase',
 @login_required
 def layer_upload(request, template='upload/layer_upload.html'):
     if request.method == 'GET':
-        
-        ##categories = Category.objects.all() #^^
-        categories = Category.objects.order_by('cat_num') #^^
-        ##coverages = Coverage.objects.all() #^^
-        coverages = Coverage.objects.order_by('cov_num') #^^
-        ##sources = Source.objects.all() #^^
-        sources = Source.objects.order_by('src_num') #^^
-        ##years = Year.objects.all() #^^
-        years = Year.objects.order_by('year_num') #^^
-        
         ctx = {
-            'categories': categories, #^^
-            'coverages': coverages, #^^
-            'sources': sources, #^^
-            'years': years, #^^
             'charsets': CHARSETS,
             'is_layer': True,
         }
@@ -169,18 +153,6 @@ def layer_upload(request, template='upload/layer_upload.html'):
                 # Moved this inside the try/except block because it can raise
                 # exceptions when unicode characters are present.
                 # This should be followed up in upstream Django.
-                
-                main = Main( #^^
-                    category=Category.objects.get(pk=request.POST['icraf_dr_category']), #^^
-                    coverage=Coverage.objects.get(pk=request.POST['icraf_dr_coverage']), #^^
-                    source=Source.objects.get(pk=request.POST['icraf_dr_source']), #^^
-                    year=Year.objects.get(pk=request.POST['icraf_dr_year']), #^^
-                    basename=name_base #^^
-                ) #^^
-                
-                main.save() #^^
-                main_id = main.id #^^
-                
                 tempdir, base_file = form.write_files()
                 saved_layer = file_upload(
                     base_file,
@@ -190,7 +162,6 @@ def layer_upload(request, template='upload/layer_upload.html'):
                     charset=form.cleaned_data["charset"],
                     abstract=form.cleaned_data["abstract"],
                     title=form.cleaned_data["layer_title"],
-                    main_id=main_id, #^^
                 )
 
             except Exception as e:
