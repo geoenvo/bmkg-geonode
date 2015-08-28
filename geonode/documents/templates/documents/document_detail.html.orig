@@ -40,11 +40,6 @@
       </div>
       {% elif resource.doc_file %}
       <p><a href="{% url "document_download" resource.id %}" target="_blank">Download the {{ resource }} document</a></p>
-      <!-- #^^ start -->
-      {% if resource.extension|lower in viewtypes %}
-      <p><a href="{% url "document_view" resource.id %}" target="_blank">View the {{ resource }} document</a></p>
-      {% endif %}
-      <!-- #^^ end -->
       {% elif  resource.doc_url %}
       <p><a href="{{ resource.doc_url }}" target="_blank">Download the {{ resource }} document.</a> <small>({% trans 'External Resource' %})</small></p>
       {%  endif %}
