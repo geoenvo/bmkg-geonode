@@ -273,7 +273,7 @@ msgstr "penjelasan umum dari produser data mengenai sejarah dataset"
 #: base/templates/base/_resourcebase_contact_snippet.html:10
 #: base/templates/base/resourcebase_info_panel.html:84
 msgid "Owner"
-msgstr "Wali data"
+msgstr "Pemilik"
 
 #: base/models.py:242
 msgid "title"
@@ -435,7 +435,7 @@ msgstr "Tentang"
 
 #: base/templates/base/_resourcebase_contact_snippet.html:5
 msgid "Owner, Point of Contact, Metadata Author"
-msgstr "Wali data, Point of Contact, Metadata Penulis"
+msgstr "Pemilik, Point of Contact, Metadata Penulis"
 
 #: base/templates/base/_resourcebase_contact_snippet.html:14
 #: base/templates/base/resourcebase_info_panel.html:89
