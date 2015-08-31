@@ -39,10 +39,11 @@
         </a>
       </div>
       {% elif resource.doc_file %}
-      <p><a href="{% url "document_download" resource.id %}" target="_blank">Download the {{ resource }} document</a></p>
       <!-- #^^ start -->
       {% if resource.extension|lower in viewtypes %}
-      <p><a href="{% url "document_view" resource.id %}" target="_blank">View the {{ resource }} document</a></p>
+      <iframe src="{% url "document_view" resource.id %}" style="border:0;" width="750" height="400" allowfullscreen webkitallowfullscreen></iframe>
+      {% else %}
+      <p><a href="{% url "document_download" resource.id %}" target="_blank">Download the {{ resource }} document</a></p>
       {% endif %}
       <!-- #^^ end -->
       {% elif  resource.doc_url %}
