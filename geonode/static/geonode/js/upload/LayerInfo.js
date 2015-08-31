@@ -173,6 +173,16 @@ define(function (require, exports) {
             }
         }
 
+        console.log('icraf_dr'); // #^^
+        console.log($('#icraf_dr_category').val()) // #^^
+        console.log($('#icraf_dr_coverage').val()) // #^^
+        console.log($('#icraf_dr_source').val()) // #^^
+        console.log($('#icraf_dr_year').val()) // #^^
+        form_data.append('icraf_dr_category', $('#icraf_dr_category').val()); // #^^
+        form_data.append('icraf_dr_coverage', $('#icraf_dr_coverage').val()); // #^^
+        form_data.append('icraf_dr_source', $('#icraf_dr_source').val()); // #^^
+        form_data.append('icraf_dr_year', $('#icraf_dr_year').val()); // #^^
+        
         form_data.append('charset', $('#charset').val());
         return form_data;
     };
