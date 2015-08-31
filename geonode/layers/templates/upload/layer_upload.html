@@ -19,6 +19,7 @@
 </div>
 <div class="row">
   <div class="col-md-8">
+    <div class="alert alert-info" role="alert">{% trans "Please upload the layer files in one set with the same file name. A minimum of 4 files in .shp, .shx, .prj, and .dbf formats are required.<br>Example: shapefile.shp, shapefile.shx, shapefile.prj, shapefile.dbf" %}</div>
     {% if incomplete %}
     <section class="widget" id="incomplete-download-list">
       <h3>{% trans "Incomplete Uploads" %}</h3>
