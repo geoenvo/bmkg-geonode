@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GeoNode\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-31 02:13-0500\n"
+"POT-Creation-Date: 2015-08-31 03:23-0500\n"
 "PO-Revision-Date: 2015-07-16 10:36+0000\n"
 "Last-Translator: Julien Collaer <julien.collaer@opengeode.be>\n"
 "Language-Team: Indonesian (http://www.transifex.com/p/geonode/language/id/)\n"
@@ -1911,6 +1911,7 @@ msgid "Layer Default Style"
 msgstr "Style Default Layer"
 
 #: layers/templates/layers/layer_style_manage.html:41
+#: layers/templates/layers/layer_style_manage.html:90
 msgid "Available styles"
 msgstr "Style yang tersedia"
 
@@ -1926,6 +1927,10 @@ msgstr ""
 msgid "Update Available Styles"
 msgstr "Ubah tamplan layer"
 
+#: layers/templates/layers/layer_style_manage.html:91
+msgid "Selected styles"
+msgstr "Style yang terpilih"
+
 #: layers/templates/upload/layer_upload.html:5
 #: layers/templates/upload/layer_upload_crs.html:7
 #: layers/templates/upload/layer_upload_csv.html:7
@@ -1938,9 +1943,9 @@ msgid ""
 "of 4 files in .shp, .shx, .prj, and .dbf formats are required.<br>Example: "
 "shapefile.shp, shapefile.shx, shapefile.prj, shapefile.dbf"
 msgstr ""
-"Mohon agar mengunggah file layer dalam satu set dengan file name yang sama. Minimal "
-"4 file dalam format .shp, .shx, .prj, dan .dbf diperlukan.<br> Contoh: "
-"shapefile.shp, shapefile.shx, shapefile.prj, shapefile.dbf"
+"Mohon agar mengunggah file layer dalam satu set dengan file name yang sama. "
+"Minimal 4 file dalam format .shp, .shx, .prj, dan .dbf diperlukan.<br> "
+"Contoh: shapefile.shp, shapefile.shx, shapefile.prj, shapefile.dbf"
 
 #: layers/templates/upload/layer_upload.html:75
 #, fuzzy

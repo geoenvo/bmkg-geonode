@@ -83,13 +83,6 @@
         });
       }
     });
-    
-    /*
-     * icraf: add style column headers
-     */
-    var stylesHeader = "<div style='float:left;width:45%;'><label>{% trans "Available styles" %}</label></div>";
-    stylesHeader = stylesHeader + "<div style='float:right;width:45%;'><label>{% trans "Selected styles" %}</label></div>";
-    $('#ms-style-select.ms-container').prepend(stylesHeader);
 
   });
 </script>
