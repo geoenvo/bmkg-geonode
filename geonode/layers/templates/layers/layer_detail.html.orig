@@ -102,17 +102,6 @@
       {% endblock %}
 
       <article id="comments" class="tab-pane">
-        <!-- TODO: Move this to a reusable template snippet -->
-        {% if request.user.is_authenticated %}
-        <h4>{% trans "Rate this layer" %}</h4>
-        {% user_rating request.user resource "layer" as user_layer_rating %}
-        <div id="user_rating" class="category-layer" data-score="{{ user_layer_rating }}"></div>
-        {% endif %}
-        <h4>{% trans 'Average Rating' %}</h4>
-        {% overall_rating resource "layer" as layer_rating %}
-        {% num_ratings resource as num_votes %}
-        <div class="overall_rating" data-score="{{ layer_rating }}"></div> ({{num_votes}})
-        
         {% with resource as obj %}
           {% include "_comments.html" %}
         {% endwith %}
@@ -129,7 +118,16 @@
       {% endif %}
 
       <article id="rate" class="tab-pane">
-        <!-- ICRAF: ratings moved to comments tab -->
+        <!-- TODO: Move this to a reusable template snippet -->
+        {% if request.user.is_authenticated %}
+        <h4>{% trans "Rate this layer" %}</h4>
+        {% user_rating request.user resource "layer" as user_layer_rating %}
+        <div id="user_rating" class="category-layer" data-score="{{ user_layer_rating }}"></div>
+        {% endif %}
+        <h4>{% trans 'Average Rating' %}</h4>
+        {% overall_rating resource "layer" as layer_rating %}
+        {% num_ratings resource as num_votes %}
+        <div class="overall_rating" data-score="{{ layer_rating }}"></div> ({{num_votes}})
       </article>
 
     </div>

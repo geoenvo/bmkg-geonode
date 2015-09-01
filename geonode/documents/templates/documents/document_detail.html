@@ -63,10 +63,6 @@
       {% endblock %}
         
       <article id="comments" class="tab-pane">
-      {% include "_comments.html" %}
-      </article>
-        
-      <article id="rate" class="tab-pane">
         <!-- TODO: Move this to a reusable template snippet -->
         {% if request.user.is_authenticated %}
         <h4>{% trans "Rate this document" %}</h4>
@@ -78,6 +74,11 @@
         {% num_ratings resource as num_votes %}
         <div class="overall_rating" style="float:left" data-score="{{ document_rating }}"></div> ({{num_votes}})
         <!-- TODO: Add display of who gave what rating based -->
+      {% include "_comments.html" %}
+      </article>
+        
+      <article id="rate" class="tab-pane">
+        <!-- ICRAF: ratings moved to comments tab -->
       </article>
 
       {% if EXIF_ENABLED and exif_data %}

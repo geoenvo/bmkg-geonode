@@ -42,7 +42,10 @@
       <div class="tab-content">
         {% include "base/resourcebase_info_panel.html" %}
         <article class="tab-pane" id="comments">
-          <!-- TODO: Move this to a reusable template snippet -->
+        {% include "_comments.html" %}
+        </article>
+        <article class="tab-pane" id="rate">
+        <!-- TODO: Move this to a reusable template snippet -->
           {% if request.user.is_authenticated %}
           <h3>{% trans "Rate this Map" %}</h3>
           {% user_rating request.user resource "map" as user_map_rating %}
@@ -52,10 +55,6 @@
           {% overall_rating resource "map" as map_rating %}
           {% num_ratings resource as num_votes %}
           <div class="overall_rating" style="float:left" data-score="{{ map_rating }}"></div> ({{num_votes}})
-        {% include "_comments.html" %}
-        </article>
-        <article class="tab-pane" id="rate">
-          <!-- ICRAF: ratings moved to comments tab -->
         </article>
         {% block social_links %}
             {% if SOCIAL_BUTTONS %}
