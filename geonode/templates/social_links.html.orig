@@ -11,14 +11,6 @@
         </header>
         <div>
               <ul class="social">
-                  <li>
-                    <div class="form-group" style="padding-left:0;">
-                      <div class="icon-addon addon-md">
-                        <input type="text" id="linkbox" class="form-control select-all" placeholder="Link" value="{{ request.build_absolute_uri }}{{ object.get_absolute_url }}" readonly>
-                        <label for="linkbox" class="glyphicon glyphicon-link" rel="tooltip" title="link"></label>
-                      </div>
-                    </div>
-                  </li>
                   {% for social_link in social_links %}
                       {% if social_link.url %}
                       <li><a href="{{ social_link.url }}" class="{{ social_link.css_class }}">{{ social_link.label }}</a></li>
