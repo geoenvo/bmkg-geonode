@@ -27,8 +27,7 @@
 
     {% if resource.abstract %}
     <dt>{% trans "Abstract" %}</dt>
-    <dd id="abstract_less" class="collapse in" itemprop="description">{{ resource.abstract|escape|urlize|linebreaks|safe|truncatechars:500 }} <a href="#show_more" data-toggle="collapse" data-target="#abstract_more,#abstract_less">{% trans "More" %}</a></dd>
-    <dd id="abstract_more" class="collapse" itemprop="description">{{ resource.abstract|escape|urlize|linebreaks|safe }} <a href="#show_less" data-toggle="collapse" data-target="#abstract_more,#abstract_less">{% trans "Less" %}</a></dd>
+    <dd itemprop="description">{{ resource.abstract|escape|urlize|linebreaks|safe|truncatechars:500 }}</dd>
     {% endif %}
     
     {% if resource.date %}

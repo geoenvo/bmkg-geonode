@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GeoNode\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-31 03:23-0500\n"
+"POT-Creation-Date: 2015-09-01 01:28-0500\n"
 "PO-Revision-Date: 2015-07-16 10:36+0000\n"
 "Last-Translator: Julien Collaer <julien.collaer@opengeode.be>\n"
 "Language-Team: Indonesian (http://www.transifex.com/p/geonode/language/id/)\n"
@@ -152,7 +152,7 @@ msgstr "data diperbaharui setiap tiga bulan sekali"
 msgid "No information provided"
 msgstr "Tidak tersedia informasi"
 
-#: base/forms.py:43 base/templates/base/resourcebase_info_panel.html:62
+#: base/forms.py:43 base/templates/base/resourcebase_info_panel.html:63
 #: documents/templates/documents/document_metadata.html:58
 #: layers/templates/layers/layer_metadata.html:63
 #: maps/templates/maps/map_metadata.html:61
@@ -271,7 +271,7 @@ msgstr "penjelasan umum dari produser data mengenai sejarah dataset"
 
 #: base/models.py:240
 #: base/templates/base/_resourcebase_contact_snippet.html:10
-#: base/templates/base/resourcebase_info_panel.html:84
+#: base/templates/base/resourcebase_info_panel.html:85
 msgid "Owner"
 msgstr "Wali data"
 
@@ -324,7 +324,7 @@ msgid "restrictions other"
 msgstr "batasan lain"
 
 #: base/models.py:264 base/templates/base/resourcebase_info_panel.html:16
-#: base/templates/base/resourcebase_info_panel.html:108
+#: base/templates/base/resourcebase_info_panel.html:109
 msgid "License"
 msgstr "Lisensi"
 
@@ -438,7 +438,7 @@ msgid "Owner, Point of Contact, Metadata Author"
 msgstr "Wali data, Point of Contact, Metadata Penulis"
 
 #: base/templates/base/_resourcebase_contact_snippet.html:14
-#: base/templates/base/resourcebase_info_panel.html:89
+#: base/templates/base/resourcebase_info_panel.html:90
 #: documents/templates/documents/document_metadata.html:48
 #: layers/templates/layers/layer_metadata.html:99
 #: maps/templates/maps/map_metadata.html:51
@@ -455,7 +455,7 @@ msgid "Title"
 msgstr "Judul"
 
 #: base/templates/base/resourcebase_info_panel.html:11
-#: base/templates/base/resourcebase_info_panel.html:103
+#: base/templates/base/resourcebase_info_panel.html:104
 msgid "SRID"
 msgstr ""
 
@@ -463,66 +463,74 @@ msgstr ""
 msgid "Abstract"
 msgstr "Abstrak"
 
-#: base/templates/base/resourcebase_info_panel.html:34
+#: base/templates/base/resourcebase_info_panel.html:30
+msgid "More"
+msgstr "Selebihnya"
+
+#: base/templates/base/resourcebase_info_panel.html:31
+msgid "Less"
+msgstr "Kurangi"
+
+#: base/templates/base/resourcebase_info_panel.html:35
 #: contrib/exif/templates/exif/_exif_document_detail.html:13
 #: templates/search/_general_filters.html:47
 msgid "Date"
 msgstr "Tanggal"
 
-#: base/templates/base/resourcebase_info_panel.html:45
-#: layers/templates/layers/layer_detail.html:344
+#: base/templates/base/resourcebase_info_panel.html:46
+#: layers/templates/layers/layer_detail.html:345
 msgid "Type"
 msgstr "Tipe"
 
-#: base/templates/base/resourcebase_info_panel.html:50 groups/models.py:44
+#: base/templates/base/resourcebase_info_panel.html:51 groups/models.py:44
 #: people/templates/people/profile_detail.html:78
 #: templates/search/_general_filters.html:19
 msgid "Keywords"
 msgstr "Kata Kunci"
 
-#: base/templates/base/resourcebase_info_panel.html:72
+#: base/templates/base/resourcebase_info_panel.html:73
 #: templates/search/_region_filter.html:5
 msgid "Regions"
 msgstr "Wilayah"
 
-#: base/templates/base/resourcebase_info_panel.html:95
+#: base/templates/base/resourcebase_info_panel.html:96
 msgid "More info"
-msgstr ""
+msgstr "Info selebihnya"
 
-#: base/templates/base/resourcebase_info_panel.html:121
+#: base/templates/base/resourcebase_info_panel.html:122
 msgid "Maintenance Frequency"
 msgstr "Frekuensi Pemeliharaan"
 
-#: base/templates/base/resourcebase_info_panel.html:126
+#: base/templates/base/resourcebase_info_panel.html:127
 msgid "Restrictions"
 msgstr "Batasan"
 
-#: base/templates/base/resourcebase_info_panel.html:135
+#: base/templates/base/resourcebase_info_panel.html:136
 msgid "Edition"
 msgstr "Edisi"
 
-#: base/templates/base/resourcebase_info_panel.html:140
+#: base/templates/base/resourcebase_info_panel.html:141
 msgid "Purpose"
 msgstr "Tujuan"
 
-#: base/templates/base/resourcebase_info_panel.html:145 templates/500.html:154
+#: base/templates/base/resourcebase_info_panel.html:146 templates/500.html:154
 #: templates/base.html:147
 msgid "Language"
 msgstr "Bahasa"
 
-#: base/templates/base/resourcebase_info_panel.html:150
+#: base/templates/base/resourcebase_info_panel.html:151
 msgid "Temporal Extent"
 msgstr "Periode waktu"
 
-#: base/templates/base/resourcebase_info_panel.html:155
+#: base/templates/base/resourcebase_info_panel.html:156
 msgid "Data Quality"
 msgstr "Kualitas Data"
 
-#: base/templates/base/resourcebase_info_panel.html:160
+#: base/templates/base/resourcebase_info_panel.html:161
 msgid "Supplemental Information"
 msgstr "Informasi tambahan"
 
-#: base/templates/base/resourcebase_info_panel.html:165
+#: base/templates/base/resourcebase_info_panel.html:166
 msgid "Spatial Representation Type"
 msgstr "Tipe Representasi Spasial"
 
@@ -643,7 +651,7 @@ msgid "No"
 msgstr "Tidak"
 
 #: contrib/geosites/templates/master_index.html:25
-#: layers/templates/layers/layer_detail.html:219 templates/index.html:30
+#: layers/templates/layers/layer_detail.html:220 templates/index.html:30
 #: templates/notification/request_download_resourcebase/full.txt:7
 msgid "Layer"
 msgid_plural "Layers"
@@ -806,118 +814,118 @@ msgstr ""
 msgid "A rating was given to a document"
 msgstr ""
 
-#: documents/templates/documents/document_detail.html:49
+#: documents/templates/documents/document_detail.html:50
 msgid "External Resource"
 msgstr "Sumber eksternal"
 
-#: documents/templates/documents/document_detail.html:71
+#: documents/templates/documents/document_detail.html:72
 msgid "Rate this document"
 msgstr "Beri penilaian untuk dokumen ini"
 
-#: documents/templates/documents/document_detail.html:75
+#: documents/templates/documents/document_detail.html:76
 #: layers/templates/layers/layer_detail.html:127
 #: maps/templates/maps/map_detail.html:54
 msgid "Average Rating"
 msgstr "Rating rata-rata"
 
-#: documents/templates/documents/document_detail.html:96
-#: documents/templates/documents/document_detail.html:98
-#: documents/templates/documents/document_detail.html:100
+#: documents/templates/documents/document_detail.html:97
+#: documents/templates/documents/document_detail.html:99
+#: documents/templates/documents/document_detail.html:101
 msgid "Download Document"
 msgstr "Download Dokumen"
 
-#: documents/templates/documents/document_detail.html:104
+#: documents/templates/documents/document_detail.html:105
 #: layers/templates/layers/layer_detail.html:146
 msgid "Request Download"
 msgstr ""
 
-#: documents/templates/documents/document_detail.html:110
-#: documents/templates/documents/document_detail.html:117
+#: documents/templates/documents/document_detail.html:111
+#: documents/templates/documents/document_detail.html:118
 msgid "Edit Document"
 msgstr "Edit Dokumen"
 
-#: documents/templates/documents/document_detail.html:125
-#: layers/templates/layers/layer_detail.html:193
+#: documents/templates/documents/document_detail.html:126
+#: layers/templates/layers/layer_detail.html:194
 #: maps/templates/maps/map_detail.html:110
 msgid "Metadata"
 msgstr ""
 
-#: documents/templates/documents/document_detail.html:126
-#: layers/templates/layers/layer_detail.html:194
-#: layers/templates/layers/layer_detail.html:203
+#: documents/templates/documents/document_detail.html:127
+#: layers/templates/layers/layer_detail.html:195
+#: layers/templates/layers/layer_detail.html:204
 #: maps/templates/maps/map_detail.html:111
 #: maps/templates/maps/map_detail.html:125
 msgid "Edit"
 msgstr ""
 
-#: documents/templates/documents/document_detail.html:132
+#: documents/templates/documents/document_detail.html:133
 #: templates/notification/request_download_resourcebase/full.txt:9
 msgid "Document"
 msgstr ""
 
-#: documents/templates/documents/document_detail.html:134
-#: layers/templates/layers/layer_detail.html:221
+#: documents/templates/documents/document_detail.html:135
+#: layers/templates/layers/layer_detail.html:222
 msgid "Replace"
 msgstr ""
 
-#: documents/templates/documents/document_detail.html:137
+#: documents/templates/documents/document_detail.html:138
 #: groups/templates/groups/group_members.html:33
 #: groups/templates/groups/group_members.html:59
 #: groups/templates/groups/group_members.html:86
-#: layers/templates/layers/layer_detail.html:227
+#: layers/templates/layers/layer_detail.html:228
 #: maps/templates/maps/map_detail.html:126
 msgid "Remove"
 msgstr "Hapus"
 
-#: documents/templates/documents/document_detail.html:144
-#: documents/templates/documents/document_detail.html:168
-#: layers/templates/layers/layer_detail.html:168
-#: layers/templates/layers/layer_detail.html:234
-#: layers/templates/layers/layer_detail.html:260
+#: documents/templates/documents/document_detail.html:145
+#: documents/templates/documents/document_detail.html:169
+#: layers/templates/layers/layer_detail.html:169
+#: layers/templates/layers/layer_detail.html:235
+#: layers/templates/layers/layer_detail.html:261
 #: maps/templates/maps/map_detail.html:89
 #: maps/templates/maps/map_detail.html:132
 #: templates/_bulk_permissions_form.html:19
 msgid "Close"
 msgstr "Dekat"
 
-#: documents/templates/documents/document_detail.html:151
-#: documents/templates/documents/document_detail.html:158
-#: layers/templates/layers/layer_detail.html:242
-#: layers/templates/layers/layer_detail.html:250
+#: documents/templates/documents/document_detail.html:152
+#: documents/templates/documents/document_detail.html:159
+#: layers/templates/layers/layer_detail.html:243
+#: layers/templates/layers/layer_detail.html:251
 msgid "Download Metadata"
 msgstr "Mengunduh Metadata"
 
-#: documents/templates/documents/document_detail.html:175
+#: documents/templates/documents/document_detail.html:176
 msgid "Resource using this document"
 msgstr "Sumberdaya yang menggunakan dokumen ini"
 
-#: documents/templates/documents/document_detail.html:177
+#: documents/templates/documents/document_detail.html:178
 msgid "List of resources using this document:"
 msgstr "Daftar sumber daya yang menggunakan dokumen ini"
 
-#: documents/templates/documents/document_detail.html:181
+#: documents/templates/documents/document_detail.html:182
 msgid "This document is related to a "
 msgstr "Dokumen ini berhubungan dengan"
 
-#: documents/templates/documents/document_detail.html:184
+#: documents/templates/documents/document_detail.html:185
 msgid "This document is not related to any maps or layers"
 msgstr "Dokumen ini tidak berhubungan dengan peta atau layer"
 
-#: documents/templates/documents/document_detail.html:191
+#: documents/templates/documents/document_detail.html:192
 #: documents/templates/documents/document_upload.html:31
 #: groups/templates/groups/group_detail.html:70
-#: layers/templates/layers/layer_detail.html:333
+#: layers/templates/layers/layer_detail.html:334
 #: layers/templates/layers/layer_replace.html:94
 #: layers/templates/upload/layer_upload.html:129
 #: maps/templates/maps/map_detail.html:178 people/admin.py:55
 msgid "Permissions"
 msgstr "Izin"
 
-#: documents/templates/documents/document_detail.html:192
+#: documents/templates/documents/document_detail.html:193
 msgid "Click the button below to change the permissions of this document."
 msgstr "Klik tombol berikut untuk mengubah izin dokumen ini"
 
-#: documents/templates/documents/document_detail.html:193
+#: documents/templates/documents/document_detail.html:194
 msgid "Change Document Permissions"
 msgstr "Ubah Kepemilikan Dokumen"
 
@@ -950,7 +958,7 @@ msgid "Error updating metadata.  Please check the following fields: "
 msgstr "Kesalahan pembaharuan metadata. Silakan cek field berikut:"
 
 #: documents/templates/documents/document_metadata.html:41
-#: documents/templates/documents/document_metadata.html:75
+#: documents/templates/documents/document_metadata.html:76
 #: groups/templates/groups/group_update.html:26
 #: layers/templates/layers/layer_metadata.html:51
 #: layers/templates/layers/layer_metadata.html:110
@@ -1644,76 +1652,76 @@ msgid "Rate this layer"
 msgstr "Nilai layer ini"
 
 #: layers/templates/layers/layer_detail.html:143
-#: layers/templates/layers/layer_detail.html:156
+#: layers/templates/layers/layer_detail.html:157
 msgid "Download Layer"
 msgstr "Unduh Layer"
 
-#: layers/templates/layers/layer_detail.html:179
-#: layers/templates/layers/layer_detail.html:186
+#: layers/templates/layers/layer_detail.html:180
+#: layers/templates/layers/layer_detail.html:187
 msgid "Edit Layer"
 msgstr "Ubah Layer"
 
-#: layers/templates/layers/layer_detail.html:201
-#: layers/templates/layers/layer_detail.html:310
+#: layers/templates/layers/layer_detail.html:202
+#: layers/templates/layers/layer_detail.html:311
 msgid "Styles"
 msgstr "Penampilan"
 
-#: layers/templates/layers/layer_detail.html:205
+#: layers/templates/layers/layer_detail.html:206
 #: services/templates/services/service_detail.html:110
 msgid "Manage"
 msgstr "Mengelola"
 
-#: layers/templates/layers/layer_detail.html:212
+#: layers/templates/layers/layer_detail.html:213
 #: maps/templates/maps/map_detail.html:117
 msgid "Thumbnail"
 msgstr "Thumbnail"
 
-#: layers/templates/layers/layer_detail.html:213
+#: layers/templates/layers/layer_detail.html:214
 #: maps/templates/maps/map_detail.html:118
 msgid "Set"
 msgstr ""
 
-#: layers/templates/layers/layer_detail.html:224
+#: layers/templates/layers/layer_detail.html:225
 msgid "Edit data"
 msgstr ""
 
-#: layers/templates/layers/layer_detail.html:268 services/views.py:1272
+#: layers/templates/layers/layer_detail.html:269 services/views.py:1272
 msgid "Legend"
 msgstr "Legenda"
 
-#: layers/templates/layers/layer_detail.html:278
+#: layers/templates/layers/layer_detail.html:279
 msgid "Maps using this layer"
 msgstr "Peta yang menggunakan layer ini"
 
-#: layers/templates/layers/layer_detail.html:280
+#: layers/templates/layers/layer_detail.html:281
 msgid "List of maps using this layer:"
 msgstr "Daftar peta yang menggunakan layer ini"
 
-#: layers/templates/layers/layer_detail.html:286
+#: layers/templates/layers/layer_detail.html:287
 msgid "This layer is not currently used in any maps."
 msgstr "Layer ini tidak digunakan pada peta manapun"
 
-#: layers/templates/layers/layer_detail.html:291
+#: layers/templates/layers/layer_detail.html:292
 msgid "Create a map using this layer"
 msgstr "Buat peta menggunakan layer ini"
 
-#: layers/templates/layers/layer_detail.html:292
+#: layers/templates/layers/layer_detail.html:293
 msgid "Click the button below to generate a new map based on this layer."
 msgstr "Klik tombol berikut untuk membuat peta baru menggunakan layer ini"
 
-#: layers/templates/layers/layer_detail.html:293
+#: layers/templates/layers/layer_detail.html:294
 msgid "Create a Map"
 msgstr "Buat Peta"
 
-#: layers/templates/layers/layer_detail.html:298
+#: layers/templates/layers/layer_detail.html:299
 msgid "Documents related to this layer"
 msgstr "Dokumen terkait dengan layer ini"
 
-#: layers/templates/layers/layer_detail.html:299
+#: layers/templates/layers/layer_detail.html:300
 msgid "List of documents related to this layer:"
 msgstr "Daftar dokumen yang terkait dengan layer ini:"
 
-#: layers/templates/layers/layer_detail.html:311
+#: layers/templates/layers/layer_detail.html:312
 msgid ""
 "The following styles are associated with this layer. Choose a style to view "
 "it in the preview map."
@@ -1721,23 +1729,23 @@ msgstr ""
 "Penampilan berikut berkaitan dengan data set ini. Pilih jenis tampilan untuk "
 "menampilkannya pada tampilan peta."
 
-#: layers/templates/layers/layer_detail.html:324
+#: layers/templates/layers/layer_detail.html:325
 msgid "No styles associated with this layer"
 msgstr "Tida ada style untuk layer ini"
 
-#: layers/templates/layers/layer_detail.html:334
+#: layers/templates/layers/layer_detail.html:335
 msgid "Click the button below to change the permissions of this layer."
 msgstr "Klik tombol berikut untuk mengubah izin layer ini"
 
-#: layers/templates/layers/layer_detail.html:335
+#: layers/templates/layers/layer_detail.html:336
 msgid "Change Layer Permissions"
 msgstr "Ubah kepemilikan layer"
 
-#: layers/templates/layers/layer_detail.html:342
+#: layers/templates/layers/layer_detail.html:343
 msgid "External service layer"
 msgstr "Lapisan layanan eksternal"
 
-#: layers/templates/layers/layer_detail.html:343
+#: layers/templates/layers/layer_detail.html:344
 msgid "Source"
 msgstr "Sumber"
 
