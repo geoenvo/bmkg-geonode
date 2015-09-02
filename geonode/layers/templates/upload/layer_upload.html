@@ -1,6 +1,7 @@
 {% extends "upload/layer_upload_base.html" %}
 {% load i18n %}
 {% load staticfiles %}
+{% load bootstrap_tags %}
 
 {% block title %} {% trans "Upload Layer"  %} - {{ block.super }}  {% endblock %}
 
@@ -19,128 +20,183 @@
 </div>
 <div class="row">
   <div class="col-md-8">
-    <div class="alert alert-info" role="alert">{% trans "Please upload the layer files in one set with the same file name. A minimum of 4 files in .shp, .shx, .prj, and .dbf formats are required.<br>Example: shapefile.shp, shapefile.shx, shapefile.prj, shapefile.dbf" %}</div>
-    {% if incomplete %}
-    <section class="widget" id="incomplete-download-list">
-      <h3>{% trans "Incomplete Uploads" %}</h3>
-      <p>{% trans "You have the following incomplete uploads" %}:</p>
-      {% for u in incomplete %}
-      <div class="clearfix uip" id="incomplete-{{ u.import_id }}">
-        <div class="pull-left">{{ u.name }}, {% trans "last updated on" %} {{ u.date }}</div>
-        <div class="upload_actions pull-right">
-          <a class="btn btn-mini" href="#" id="resume-{{ u.import_id }}">{% trans "Resume" %}</a>
-          <a class="btn btn-mini" href="#" id="delete-{{ u.import_id }}"><i class="icon-trash"></i> {% trans "Delete" %}</a>
-        </div>
-      </div>
-      {% endfor %}
-    </section>
-    <div id="confirm-delete" class="hidden alert alert-warning">
-      {% trans "Are you sure you want to delete this upload?" %}
-      <a href="#y" class="btn btn-danger">{% trans "Delete" %}</a>
-      <a href="#n" class="btn btn-default">{% trans "Cancel" %}</a>
-      <a href="#yy">{% trans "Delete, and don't ask me again." %}</a>
-    </div>
-    {% endif %}
-
-    {% block additional_info %}{% endblock %}
-
-    {% if errors %}
-    <div id="errors" class="alert alert-danger">
-      {% for error in errors %}
-      <p>{{ error }}</p>
-      {% endfor %}
-    </div>
-    {% endif %}
-
-    <div id="upload-status"></div>
-
-    <section id="drop-zone">
-      <h3><i class="fa fa-cloud-upload"></i><br />{% trans "Drop files here" %}</h3>
-    </section>
-
-    <p>{% trans " or select them one by one:" %}</p>
-
-    <form id="file-uploader" method="post" enctype="multipart/form-data">
-      <input class="btn" id="file-input" type="file" multiple>
-    </form>
-
-    <section class="widget">
-      <ul id="global-errors"></ul>
-      <h4>{% trans "Files to be uploaded" %}</h4>
-      <div id="file-queue"></div>
-    </section>
-    
     <!-- #^^ ICRAF start -->
-    <h3>ICRAF</h3>
-    <div class="panel-group">
+    <div id="steps-accordion" class="panel-group">
       <div class="panel panel-default">
-        <div class="panel-collapse collapse in">
-          <div class="radio col-xs-6">
-            <label for="icraf_dr_category">{% trans "Select category:" %}</label>
-            <select id="icraf_dr_category" class="form-control">
-              {% for category in categories %}
-              <option value={{ category.id }}>{{ category }}</option>
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a data-toggle="collapse" data-parent="#steps-accordion" href="#collapseFileUpload">
+              Step 1 &raquo; {% trans "Select Layer Files" %}
+            </a>
+          </h4>
+        </div>
+        <div id="collapseFileUpload" class="panel-collapse collapse in">
+          <div class="panel-body">
+            <div class="alert alert-info" role="alert">{% trans "Please upload the layer files in one set with the same file name. A minimum of 4 files in .shp, .shx, .prj, and .dbf formats are required.<br>Example: shapefile.shp, shapefile.shx, shapefile.prj, shapefile.dbf" %}</div>
+            {% if incomplete %}
+            <section class="widget" id="incomplete-download-list">
+              <h3>{% trans "Incomplete Uploads" %}</h3>
+              <p>{% trans "You have the following incomplete uploads" %}:</p>
+              {% for u in incomplete %}
+              <div class="clearfix uip" id="incomplete-{{ u.import_id }}">
+                <div class="pull-left">{{ u.name }}, {% trans "last updated on" %} {{ u.date }}</div>
+                <div class="upload_actions pull-right">
+                  <a class="btn btn-mini" href="#" id="resume-{{ u.import_id }}">{% trans "Resume" %}</a>
+                  <a class="btn btn-mini" href="#" id="delete-{{ u.import_id }}"><i class="icon-trash"></i> {% trans "Delete" %}</a>
+                </div>
+              </div>
               {% endfor %}
-            </select>
-          </div>
-          
-          <div class="clearfix"></div>
-          
-          <div class="radio col-xs-6">
-            <label for="icraf_dr_coverage">{% trans "Select coverage:" %}</label>
-            <select id="icraf_dr_coverage" class="form-control">
-              {% for coverage in coverages %}
-              <option value={{ coverage.id }}>{{ coverage }}</option>
+            </section>
+            <div id="confirm-delete" class="hidden alert alert-warning">
+              {% trans "Are you sure you want to delete this upload?" %}
+              <a href="#y" class="btn btn-danger">{% trans "Delete" %}</a>
+              <a href="#n" class="btn btn-default">{% trans "Cancel" %}</a>
+              <a href="#yy">{% trans "Delete, and don't ask me again." %}</a>
+            </div>
+            {% endif %}
+
+            {% block additional_info %}{% endblock %}
+
+            {% if errors %}
+            <div id="errors" class="alert alert-danger">
+              {% for error in errors %}
+              <p>{{ error }}</p>
               {% endfor %}
-            </select>
-          </div>
-          
-          <div class="clearfix"></div>
-          
-          <div class="radio col-xs-6">
-            <label for="icraf_dr_source">{% trans "Select source:" %}</label>
-            <select id="icraf_dr_source" class="form-control">
-              {% for source in sources %}
-              <option value={{ source.id }}>{{ source }}</option>
-              {% endfor %}
-            </select>
-          </div>
-          
-          <div class="clearfix"></div>
-          
-          <div class="radio col-xs-6">
-            <label for="icraf_dr_year">{% trans "Select year:" %}</label>
-            <select id="icraf_dr_year" class="form-control">
-              {% for year in years %}
-              <option value={{ year.id }}>{{ year }}</option>
-              {% endfor %}
-            </select>
+            </div>
+            {% endif %}
+
+            <div id="upload-status"></div>
+
+            <section id="drop-zone">
+              <h3><i class="fa fa-cloud-upload"></i><br />{% trans "Drop files here" %}</h3>
+            </section>
+
+            <p>{% trans " or select them one by one:" %}</p>
+
+            <form id="file-uploader" method="post" enctype="multipart/form-data">
+              <input class="btn" id="file-input" type="file" multiple>
+            </form>
+
+            <section class="widget">
+              <ul id="global-errors"></ul>
+              <h4>{% trans "Files to be uploaded" %}</h4>
+              <div id="file-queue"></div>
+            </section>
+            
+            <section class="charset">
+              <p>{% trans "Select the charset or leave default" %}</p>
+              <select id="charset">
+                {% for charset in charsets %}
+                {% if charset.0 == 'UTF-8' %} 
+                <option selected='selected' value={{ charset.0 }}>{{ charset.1 }}</option>
+                {% else %}
+                <option value={{ charset.0 }}>{{ charset.1 }}</option>
+                {% endif %}
+                {% endfor %}
+              </select>
+            </section>
           </div>
         </div>
       </div>
+      
+      <div class="panel panel-default hidden">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a data-toggle="collapse" data-parent="#steps-accordion" href="#collapseICRAF">
+              Step 1 &raquo; ICRAF
+            </a>
+          </h4>
+        </div>
+        <div id="collapseICRAF" class="panel-collapse collapse">
+          <div class="panel-body">
+            <div class="col-md-6 form-controls">
+              <div class="form-group">
+                <label for="icraf_dr_category">{% trans "Select category:" %}</label>
+                <select id="icraf_dr_category" class="form-control">
+                  {% for category in categories %}
+                  <option value={{ category.id }}>{{ category }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="icraf_dr_coverage">{% trans "Select coverage:" %}</label>
+                <select id="icraf_dr_coverage" class="form-control">
+                  {% for coverage in coverages %}
+                  <option value={{ coverage.id }}>{{ coverage }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="icraf_dr_source">{% trans "Select source:" %}</label>
+                <select id="icraf_dr_source" class="form-control">
+                  {% for source in sources %}
+                  <option value={{ source.id }}>{{ source }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="icraf_dr_year">{% trans "Select year:" %}</label>
+                <select id="icraf_dr_year" class="form-control">
+                  {% for year in years %}
+                  <option value={{ year.id }}>{{ year }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a data-toggle="collapse" data-parent="#steps-accordion" href="#collapseMetadata">
+              Step 2 &raquo; {% trans "Edit Metadata" %}
+            </a>
+          </h4>
+        </div>
+        <div id="collapseMetadata" class="panel-collapse collapse">
+          <div class="panel-body">
+            <div class="col-md-6 form-controls">
+              {{ layer_form|as_bootstrap }}
+              <fieldset id="category_form">
+                <label class="control-label required-field">{% trans "Category" %}</label>
+                {% autoescape off %}
+                {% for choice in category_form.category_choice_field.field.choices %}
+                <div class="radio">
+                  <input type="radio" name="category_choice_field" value="{{ choice.0 }}"
+                    {{ choice.1 }}
+                  </input>
+                </div>
+                {% endfor %}
+                {% endautoescape %}
+              </fieldset>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      {% if GEONODE_SECURITY_ENABLED %}
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a data-toggle="collapse" data-parent="#steps-accordion" href="#collapsePermissions">
+              Step 3 &raquo; {% trans "Set Permissions" %}
+            </a>
+          </h4>
+        </div>
+        <div id="collapsePermissions" class="panel-collapse collapse">
+          <div class="panel-body">
+            <form id="permission_form">
+              {% include "_permissions.html" %}
+            </form>
+          </div>
+        </div>
+      </div>
+      {% endif %}
     </div>
-    
-    {% if GEONODE_SECURITY_ENABLED %}
-    <h3>{% trans "Permissions"  %}</h3>
-    <form id="permission_form">
-      {% include "_permissions.html" %}
-    </form>
-    {% endif %}
     <!-- #^^ ICRAF end -->
-
-    <section class="charset">
-      <p>{% trans "Select the charset or leave default" %}</p>
-      <select id="charset">
-        {% for charset in charsets %}
-        {% if charset.0 == 'UTF-8' %} 
-        <option selected='selected' value={{ charset.0 }}>{{ charset.1 }}</option>
-        {% else %}
-        <option value={{ charset.0 }}>{{ charset.1 }}</option>
-        {% endif %}
-        {% endfor %}
-      </select>
-    </section>
-
+    
     <section>
       <a href="#" id="clear-button" class="btn btn-default">{% trans "Clear" %}</a>
       <a href="#" id="upload-button" class="btn btn-danger">{% trans "Upload files" %}</a>
@@ -173,6 +229,7 @@
 {% endautoescape %}
 
 </script>
+{% include 'metadata_form_js.html' %} 
 {% if GEONODE_SECURITY_ENABLED %}
 {% with resource=layer %}
 {% include "_permissions_form_js.html" %}

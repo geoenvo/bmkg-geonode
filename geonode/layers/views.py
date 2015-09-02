@@ -135,11 +135,16 @@ def layer_upload(request, template='upload/layer_upload.html'):
         ##years = Year.objects.all() #^^
         years = Year.objects.order_by('year_num') #^^
         
+        layer_form = LayerForm(prefix="resource") #^^
+        category_form = CategoryForm(prefix="category_choice_field") #^^
+        
         ctx = {
             'categories': categories, #^^
             'coverages': coverages, #^^
             'sources': sources, #^^
             'years': years, #^^
+            "layer_form": layer_form, #^^
+            "category_form": category_form, #^^
             'charsets': CHARSETS,
             'is_layer': True,
         }
