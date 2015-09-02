@@ -70,40 +70,63 @@
       <div id="file-queue"></div>
     </section>
     
-    <!-- #^^ icraf_dr start -->
-    <section>
-        <p>{% trans "Select category" %}</p>
-        <select id="icraf_dr_category">
-        {% for category in categories %}
-        <option value={{ category.id }}>{{ category }}</option>
-        {% endfor %}
-      </select>
-    </section>
-    <section>
-        <p>{% trans "Select coverage" %}</p>
-        <select id="icraf_dr_coverage">
-        {% for coverage in coverages %}
-        <option value={{ coverage.id }}>{{ coverage }}</option>
-        {% endfor %}
-      </select>
-    </section>
-    <section>
-        <p>{% trans "Select source" %}</p>
-        <select id="icraf_dr_source">
-        {% for source in sources %}
-        <option value={{ source.id }}>{{ source }}</option>
-        {% endfor %}
-      </select>
-    </section>
-    <section>
-        <p>{% trans "Select year" %}</p>
-        <select id="icraf_dr_year">
-        {% for year in years %}
-        <option value={{ year.id }}>{{ year }}</option>
-        {% endfor %}
-      </select>
-    </section>
-    <!-- #^^ icraf_dr end -->
+    <!-- #^^ ICRAF start -->
+    <h3>ICRAF</h3>
+    <div class="panel-group">
+      <div class="panel panel-default">
+        <div class="panel-collapse collapse in">
+          <div class="radio col-xs-6">
+            <label for="icraf_dr_category">{% trans "Select category:" %}</label>
+            <select id="icraf_dr_category" class="form-control">
+              {% for category in categories %}
+              <option value={{ category.id }}>{{ category }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          
+          <div class="clearfix"></div>
+          
+          <div class="radio col-xs-6">
+            <label for="icraf_dr_coverage">{% trans "Select coverage:" %}</label>
+            <select id="icraf_dr_coverage" class="form-control">
+              {% for coverage in coverages %}
+              <option value={{ coverage.id }}>{{ coverage }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          
+          <div class="clearfix"></div>
+          
+          <div class="radio col-xs-6">
+            <label for="icraf_dr_source">{% trans "Select source:" %}</label>
+            <select id="icraf_dr_source" class="form-control">
+              {% for source in sources %}
+              <option value={{ source.id }}>{{ source }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          
+          <div class="clearfix"></div>
+          
+          <div class="radio col-xs-6">
+            <label for="icraf_dr_year">{% trans "Select year:" %}</label>
+            <select id="icraf_dr_year" class="form-control">
+              {% for year in years %}
+              <option value={{ year.id }}>{{ year }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    {% if GEONODE_SECURITY_ENABLED %}
+    <h3>{% trans "Permissions"  %}</h3>
+    <form id="permission_form">
+      {% include "_permissions.html" %}
+    </form>
+    {% endif %}
+    <!-- #^^ ICRAF end -->
 
     <section class="charset">
       <p>{% trans "Select the charset or leave default" %}</p>
@@ -126,10 +149,7 @@
 
   {% if GEONODE_SECURITY_ENABLED %}
   <div class="col-md-4">
-    <h3>{% trans "Permissions"  %}</h3>
-    <form id="permission_form">
-      {% include "_permissions.html" %}
-    </form>
+    <!-- ICRAF: moved to main body -->
   </div>
   {% endif %}
 </div>
