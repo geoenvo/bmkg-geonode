@@ -173,15 +173,78 @@ define(function (require, exports) {
             }
         }
 
-        console.log('icraf_dr'); // #^^
-        console.log($('#icraf_dr_category').val()) // #^^
-        console.log($('#icraf_dr_coverage').val()) // #^^
-        console.log($('#icraf_dr_source').val()) // #^^
-        console.log($('#icraf_dr_year').val()) // #^^
-        form_data.append('icraf_dr_category', $('#icraf_dr_category').val()); // #^^
-        form_data.append('icraf_dr_coverage', $('#icraf_dr_coverage').val()); // #^^
-        form_data.append('icraf_dr_source', $('#icraf_dr_source').val()); // #^^
-        form_data.append('icraf_dr_year', $('#icraf_dr_year').val()); // #^^
+        console.log('=====> icraf_dr'); // #^^
+        console.log($('#form_icraf_dr [name="icraf_dr_category"]').val()) // #^^
+        console.log($('#form_icraf_dr [name="icraf_dr_coverage"]').val()) // #^^
+        console.log($('#form_icraf_dr [name="icraf_dr_source"]').val()) // #^^
+        console.log($('#form_icraf_dr [name="icraf_dr_year"]').val()) // #^^
+        form_data.append('icraf_dr_category', $('#form_icraf_dr [name="icraf_dr_category"]').val()); // #^^
+        form_data.append('icraf_dr_coverage', $('#form_icraf_dr [name="icraf_dr_coverage"]').val()); // #^^
+        form_data.append('icraf_dr_source', $('#form_icraf_dr [name="icraf_dr_source"]').val()); // #^^
+        form_data.append('icraf_dr_year', $('#form_icraf_dr [name="icraf_dr_year"]').val()); // #^^
+        
+        console.log('=====> metadata'); // #^^
+        console.log($('#form_metadata [name="resource-owner"]').val()) // #^^
+        console.log($('#form_metadata [name="resource-title"]').val()) // #^^
+        console.log($('#form_metadata [name="resource-date"]').val()) // #^^
+        console.log($('#form_metadata [name="resource-date_type"]').val()) // #^^
+        console.log($('#form_metadata [name="resource-edition"]').val()) // #^^
+        console.log($('#form_metadata [name="resource-abstract"]').val()) // #^^
+        console.log($('#form_metadata [name="resource-purpose"]').val()) // #^^
+        console.log($('#form_metadata [name="resource-maintenance_frequency"]').val()) // #^^
+        console.log($('#form_metadata [name="resource-regions"]').val()) // #^^
+        console.log($('#form_metadata [name="resource-restriction_code_type"]').val()) // #^^
+        console.log($('#form_metadata [name="resource-constraints_other"]').val()) // #^^
+        console.log($('#form_metadata [name="resource-license"]').val()) // #^^
+        console.log($('#form_metadata [name="resource-language"]').val()) // #^^
+        console.log($('#form_metadata [name="resource-spatial_representation_type"]').val()) // #^^
+        console.log($('#form_metadata [name="resource-temporal_extent_start"]').val()) // #^^
+        console.log($('#form_metadata [name="resource-temporal_extent_end"]').val()) // #^^
+        console.log($('#form_metadata [name="resource-supplemental_information"]').val()) // #^^
+        console.log($('#form_metadata [name="resource-distribution_url"]').val()) // #^^
+        console.log($('#form_metadata [name="resource-distribution_description"]').val()) // #^^
+        console.log($('#form_metadata [name="resource-data_quality_statement"]').val()) // #^^
+        console.log($('#form_metadata [name="resource-featured"]').val()) // #^^
+        console.log($('#form_metadata [name="resource-is_published"]').val()) // #^^
+        console.log($('#form_metadata [name="resource-thumbnail_url"]').val()) // #^^
+        console.log($('#form_metadata [name="resource-keywords"]').val()) // #^^
+        console.log($('#form_metadata [name="resource-poc"]').val()) // #^^
+        console.log($('#form_metadata [name="resource-metadata_author"]').val()) // #^^
+        console.log($('#form_metadata [name="category_choice_field"]:checked').val()) // #^^
+        form_data.append('owner', $('#form_metadata [name="resource-owner"]').val()); // #^^
+        form_data.append('title', $('#form_metadata [name="resource-title"]').val()); // #^^
+        form_data.append('date', $('#form_metadata [name="resource-date"]').val()); // #^^
+        form_data.append('date_type', $('#form_metadata [name="resource-date_type"]').val()); // #^^
+        form_data.append('edition', $('#form_metadata [name="resource-edition"]').val()); // #^^
+        form_data.append('abstract', $('#form_metadata [name="resource-abstract"]').val()); // #^^
+        form_data.append('purpose', $('#form_metadata [name="resource-purpose"]').val()); // #^^
+        form_data.append('maintenance_frequency', $('#form_metadata [name="resource-maintenance_frequency"]').val()); // #^^
+        form_data.append('regions', $('#form_metadata [name="resource-regions"]').val()); // #^^
+        form_data.append('restriction_code_type', $('#form_metadata [name="resource-restriction_code_type"]').val()); // #^^
+        form_data.append('constraints_other', $('#form_metadata [name="resource-constraints_other"]').val()); // #^^
+        form_data.append('license', $('#form_metadata [name="resource-license"]').val()); // #^^
+        form_data.append('language', $('#form_metadata [name="resource-language"]').val()); // #^^
+        form_data.append('spatial_representation_type', $('#form_metadata [name="resource-spatial_representation_type"]').val()); // #^^
+        form_data.append('temporal_extent_start', $('#form_metadata [name="resource-temporal_extent_start"]').val()); // #^^
+        form_data.append('temporal_extent_end', $('#form_metadata [name="resource-temporal_extent_end"]').val()); // #^^
+        form_data.append('supplemental_information', $('#form_metadata [name="resource-supplemental_information"]').val()); // #^^
+        form_data.append('distribution_url', $('#form_metadata [name="resource-distribution_url"]').val()); // #^^
+        form_data.append('distribution_description', $('#form_metadata [name="resource-distribution_description"]').val()); // #^^
+        form_data.append('data_quality_statement', $('#form_metadata [name="resource-data_quality_statement"]').val()); // #^^
+        
+        if ($('#form_metadata [name="resource-featured"]').prop('checked')) { // #^^
+            form_data.append('featured', $('#form_metadata [name="resource-featured"]').val()); // #^^
+        } // #^^
+        
+        if ($('#form_metadata [name="resource-is_published"]').prop('checked')) { // #^^
+            form_data.append('is_published', $('#form_metadata [name="resource-is_published"]').val()); // #^^
+        } // #^^
+        
+        form_data.append('thumbnail_url', $('#form_metadata [name="resource-thumbnail_url"]').val()); // #^^
+        form_data.append('keywords', $('#form_metadata [name="resource-keywords"]').val()); // #^^
+        form_data.append('poc', $('#form_metadata [name="resource-poc"]').val()); // #^^
+        form_data.append('metadata_author', $('#form_metadata [name="resource-metadata_author"]').val()); // #^^
+        form_data.append('category_choice_field', $('#form_metadata [name="category_choice_field"]:checked').val()); // #^^
         
         form_data.append('charset', $('#charset').val());
         return form_data;

@@ -186,6 +186,37 @@ def layer_upload(request, template='upload/layer_upload.html'):
                 main.save() #^^
                 main_id = main.id #^^
                 
+                #^^ get metadata form values
+                form_metadata = json.dumps({ #^^
+                    'owner': request.POST['owner'], #^^
+                    'title': request.POST['title'], #^^
+                    'date': request.POST['date'], #^^
+                    'date_type': request.POST['date_type'], #^^
+                    'edition': request.POST['edition'], #^^
+                    'abstract': request.POST['abstract'], #^^
+                    'purpose': request.POST['purpose'], #^^
+                    'maintenance_frequency': request.POST['maintenance_frequency'], #^^
+                    'regions': request.POST['regions'], #^^
+                    'restriction_code_type': request.POST['restriction_code_type'], #^^
+                    'constraints_other': request.POST['constraints_other'], #^^
+                    'license': request.POST['license'], #^^
+                    'language': request.POST['language'], #^^
+                    'spatial_representation_type': request.POST['spatial_representation_type'], #^^
+                    'temporal_extent_start': request.POST['temporal_extent_start'], #^^
+                    'temporal_extent_end': request.POST['temporal_extent_end'], #^^
+                    'supplemental_information': request.POST['supplemental_information'], #^^
+                    'distribution_url': request.POST['distribution_url'], #^^
+                    'distribution_description': request.POST['distribution_description'], #^^
+                    'data_quality_statement': request.POST['data_quality_statement'], #^^
+                    'featured': request.POST.get('featured', False), #^^
+                    'is_published': request.POST.get('is_published', False), #^^
+                    'thumbnail_url': request.POST['thumbnail_url'], #^^
+                    'keywords': request.POST['keywords'], #^^
+                    'poc': request.POST['poc'], #^^
+                    'metadata_author': request.POST['metadata_author'], #^^
+                    'category_choice_field': request.POST['category_choice_field'], #^^
+                }) #^^
+                
                 tempdir, base_file = form.write_files()
                 saved_layer = file_upload(
                     base_file,
@@ -196,6 +227,7 @@ def layer_upload(request, template='upload/layer_upload.html'):
                     abstract=form.cleaned_data["abstract"],
                     title=form.cleaned_data["layer_title"],
                     main_id=main_id, #^^
+                    form_metadata=form_metadata, #^^
                 )
 
             except Exception as e:

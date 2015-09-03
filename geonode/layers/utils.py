@@ -53,6 +53,9 @@ import tarfile
 from zipfile import ZipFile, is_zipfile
 
 from geonode.layers.models import LayerFile #^^
+from django.utils import simplejson as json #^^
+from geonode.base.models import RestrictionCodeType, License #^^
+from dateutil.parser import * #^^
 
 logger = logging.getLogger('geonode.layers.utils')
 
@@ -357,7 +360,7 @@ def extract_tarfile(upload_file, extension='.shp', tempdir=None):
 
 def file_upload(filename, name=None, user=None, title=None, abstract=None,
                 keywords=[], category=None, regions=[],
-                skip=True, overwrite=False, charset='UTF-8', main_id=None): #^^
+                skip=True, overwrite=False, charset='UTF-8', main_id=None, form_metadata=None): #^^
     """Saves a layer in GeoNode asking as little information as possible.
        Only filename is required, user and title are optional.
     """
@@ -431,6 +434,71 @@ def file_upload(filename, name=None, user=None, title=None, abstract=None,
         'is_published': is_published,
         'category': category
     }
+    
+    #^^ start
+    if form_metadata != None:
+        print 'debug'
+        print form_metadata
+        
+        metadata = json.loads(form_metadata)
+        defaults['title'] = metadata['title']
+        
+        if (len(metadata['date'])):
+            try:
+                parse(metadata['date'])
+                defaults['date'] = metadata['date']
+            except ValueError:
+                pass
+        
+        defaults['date_type'] = metadata['date_type']
+        defaults['edition'] = metadata['edition']
+        defaults['abstract'] = metadata['abstract']
+        defaults['purpose'] = metadata['purpose']
+        defaults['maintenance_frequency'] = metadata['maintenance_frequency']
+        
+        # TODO:
+        #regions = list(metadata['regions'])
+        
+        defaults['restriction_code_type'] = RestrictionCodeType(id=metadata['restriction_code_type'])
+        defaults['constraints_other'] = metadata['constraints_other']
+        defaults['license'] = License(id=metadata['license'])
+        defaults['language'] = metadata['language']
+        defaults['spatial_representation_type'] = SpatialRepresentationType(id=metadata['spatial_representation_type'])
+        
+        if (len(metadata['temporal_extent_start'])):
+            try:
+                parse(metadata['temporal_extent_start'])
+                defaults['temporal_extent_start'] = metadata['temporal_extent_start']
+            except ValueError:
+                pass
+        
+        if (len(metadata['temporal_extent_end'])):
+            try:
+                parse(metadata['temporal_extent_end'])
+                defaults['temporal_extent_end'] = metadata['temporal_extent_end']
+            except ValueError:
+                pass
+        
+        defaults['supplemental_information'] = metadata['supplemental_information']
+        defaults['distribution_url'] = metadata['distribution_url']
+        defaults['distribution_description'] = metadata['distribution_description']
+        defaults['data_quality_statement'] = metadata['data_quality_statement']
+        
+        if (metadata['featured'] != False):
+            defaults['featured'] = True
+        
+        if (metadata['is_published'] != False):
+            defaults['is_published'] = True
+        
+        # TODO: validate URL
+        defaults['thumbnail_url'] = metadata['thumbnail_url']
+        
+        #defaults['keywords'] = list(metadata['keywords'])
+        #defaults['poc'] = metadata['poc']
+        #defaults['metadata_author'] = metadata['metadata_author']
+        
+        defaults['category'] = TopicCategory(id=metadata['category_choice_field'])
+    #^^ end
 
     # set metadata
     if 'xml' in files:
