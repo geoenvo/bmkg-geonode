@@ -1,7 +1,7 @@
 {% extends "upload/layer_upload_base.html" %}
 {% load i18n %}
 {% load staticfiles %}
-{% load bootstrap_tags %}
+{% load icraf_dr_tags %}
 
 {% block title %} {% trans "Upload Layer"  %} - {{ block.super }}  {% endblock %}
 
@@ -158,7 +158,112 @@
         <div id="collapseMetadata" class="panel-collapse collapse">
           <div class="panel-body">
             <div class="col-md-6 form-controls">
-              {{ layer_form|as_bootstrap }}
+              <div class="form-group">
+                <label for="{{ layer_form.owner.id_for_label }}" class="control-label">{% trans layer_form.owner.label %}</label>
+                {{ layer_form.owner|add_class:"form-control" }}
+              </div>
+              <div class="form-group">
+                <label for="{{ layer_form.title.id_for_label }}" class="control-label required-field">{% trans layer_form.title.label %}</label>
+                {{ layer_form.title|add_class:"form-control" }}
+              </div>
+              <div class="form-group">
+                <label for="{{ layer_form.date.id_for_label }}" class="control-label required-field">{% trans layer_form.date.label %}</label>
+                {{ layer_form.date|add_class:"form-control" }}
+              </div>
+              <div class="form-group">
+                <label for="{{ layer_form.date_type.id_for_label }}" class="control-label required-field">{% trans layer_form.date_type.label %}</label>
+                {{ layer_form.date_type|add_class:"form-control" }}
+              </div>
+              <div class="form-group">
+                <label for="{{ layer_form.edition.id_for_label }}" class="control-label">{% trans layer_form.edition.label %}</label>
+                {{ layer_form.edition|add_class:"form-control" }}
+              </div>
+              <div class="form-group">
+                <label for="{{ layer_form.abstract.id_for_label }}" class="control-label">{% trans layer_form.abstract.label %}</label>
+                {{ layer_form.abstract|add_class:"form-control" }}
+              </div>
+              <div class="form-group">
+                <label for="{{ layer_form.purpose.id_for_label }}" class="control-label">{% trans layer_form.purpose.label %}</label>
+                {{ layer_form.purpose|add_class:"form-control" }}
+              </div>
+              <div class="form-group">
+                <label for="{{ layer_form.maintenance_frequency.id_for_label }}" class="control-label">{% trans layer_form.maintenance_frequency.label %}</label>
+                {{ layer_form.maintenance_frequency|add_class:"form-control" }}
+              </div>
+              <div class="form-group">
+                <label for="{{ layer_form.regions.id_for_label }}" class="control-label">{% trans layer_form.regions.label %}</label>
+                {{ layer_form.regions|add_class:"form-control" }}
+              </div>
+              <div class="form-group">
+                <label for="{{ layer_form.restriction_code_type.id_for_label }}" class="control-label">{% trans layer_form.restriction_code_type.label %}</label>
+                {{ layer_form.restriction_code_type|add_class:"form-control" }}
+              </div>
+              <div class="form-group">
+                <label for="{{ layer_form.constraints_other.id_for_label }}" class="control-label">{% trans layer_form.constraints_other.label %}</label>
+                {{ layer_form.constraints_other|add_class:"form-control" }}
+              </div>
+              <div class="form-group">
+                <label for="{{ layer_form.license.id_for_label }}" class="control-label">{% trans layer_form.license.label %}</label>
+                {{ layer_form.license|add_class:"form-control" }}
+              </div>
+              <div class="form-group">
+                <label for="{{ layer_form.language.id_for_label }}" class="control-label required-field">{% trans layer_form.language.label %}</label>
+                {{ layer_form.language|add_class:"form-control" }}
+              </div>
+              <div class="form-group">
+                <label for="{{ layer_form.spatial_representation_type.id_for_label }}" class="control-label">{% trans layer_form.spatial_representation_type.label %}</label>
+                {{ layer_form.spatial_representation_type|add_class:"form-control" }}
+              </div>
+              <div class="form-group">
+                <label for="{{ layer_form.temporal_extent_start.id_for_label }}" class="control-label">{% trans layer_form.temporal_extent_start.label %}</label>
+                {{ layer_form.temporal_extent_start|add_class:"form-control" }}
+              </div>
+              <div class="form-group">
+                <label for="{{ layer_form.temporal_extent_end.id_for_label }}" class="control-label">{% trans layer_form.temporal_extent_end.label %}</label>
+                {{ layer_form.temporal_extent_end|add_class:"form-control" }}
+              </div>
+              <div class="form-group">
+                <label for="{{ layer_form.supplemental_information.id_for_label }}" class="control-label required-field">{% trans layer_form.supplemental_information.label %}</label>
+                {{ layer_form.supplemental_information|add_class:"form-control" }}
+              </div>
+              <div class="form-group">
+                <label for="{{ layer_form.distribution_url.id_for_label }}" class="control-label">{% trans layer_form.distribution_url.label %}</label>
+                {{ layer_form.distribution_url|add_class:"form-control" }}
+              </div>
+              <div class="form-group">
+                <label for="{{ layer_form.distribution_description.id_for_label }}" class="control-label">{% trans layer_form.distribution_description.label %}</label>
+                {{ layer_form.distribution_description|add_class:"form-control" }}
+              </div>
+              <div class="form-group">
+                <label for="{{ layer_form.data_quality_statement.id_for_label }}" class="control-label">{% trans layer_form.data_quality_statement.label %}</label>
+                {{ layer_form.data_quality_statement|add_class:"form-control" }}
+              </div>
+              <div class="form-group">
+                <div class="checkbox">
+                  <label for="{{ layer_form.featured.id_for_label }}">{{ layer_form.featured }} {% trans layer_form.featured.label %}</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="checkbox">
+                  <label for="{{ layer_form.is_published.id_for_label }}" class="control-label">{{ layer_form.is_published }} {% trans layer_form.is_published.label %}</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="{{ layer_form.thumbnail_url.id_for_label }}" class="control-label">{% trans layer_form.thumbnail_url.label %}</label>
+                {{ layer_form.thumbnail_url|add_class:"form-control" }}
+              </div>
+              <div class="form-group">
+                <label for="{{ layer_form.keywords.id_for_label }}" class="control-label">{% trans layer_form.keywords.label %}</label>
+                {{ layer_form.keywords|add_class:"form-control" }}
+              </div>
+              <div class="form-group">
+                <label for="{{ layer_form.poc.id_for_label }}" class="control-label">{% trans layer_form.poc.label %}</label>
+                {{ layer_form.poc|add_class:"form-control" }}
+              </div>
+              <div class="form-group">
+                <label for="{{ layer_form.metadata_author.id_for_label }}" class="control-label">{% trans layer_form.metadata_author.label %}</label>
+                {{ layer_form.metadata_author|add_class:"form-control" }}
+              </div>
               <fieldset id="category_form">
                 <label class="control-label required-field">{% trans "Category" %}</label>
                 {% autoescape off %}
