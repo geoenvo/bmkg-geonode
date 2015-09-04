@@ -52,10 +52,13 @@ import tarfile
 
 from zipfile import ZipFile, is_zipfile
 
-from geonode.layers.models import LayerFile #^^
-from django.utils import simplejson as json #^^
-from geonode.base.models import RestrictionCodeType, License #^^
 from dateutil.parser import * #^^
+from django.utils import simplejson as json #^^
+from django.core.validators import URLValidator #^^
+from django.core.exceptions import ValidationError #^^
+from geonode.layers.models import LayerFile #^^
+from geonode.base.models import RestrictionCodeType, License #^^
+from geonode.people.forms import ProfileForm
 
 logger = logging.getLogger('geonode.layers.utils')
 
@@ -435,14 +438,26 @@ def file_upload(filename, name=None, user=None, title=None, abstract=None,
         'category': category
     }
     
-    #^^ start
+    #^^ start processing layer metadata
+    metadata = None
+    
     if form_metadata != None:
-        print 'debug'
+        print 'debug form_metadata'
         print form_metadata
         
         metadata = json.loads(form_metadata)
+        
+        # check if owner exists
+        if (metadata['owner'].isdigit()):
+            try:
+                owner = get_user_model().objects.get(id=metadata['owner'])
+                defaults['owner'] = owner
+            except get_user_model().DoesNotExist:
+                pass
+        
         defaults['title'] = metadata['title']
         
+        # parse date format from datetimepicker YYYY-MM-DD HH:MM:SS
         if (len(metadata['date'])):
             try:
                 parse(metadata['date'])
@@ -456,14 +471,19 @@ def file_upload(filename, name=None, user=None, title=None, abstract=None,
         defaults['purpose'] = metadata['purpose']
         defaults['maintenance_frequency'] = metadata['maintenance_frequency']
         
-        # TODO:
-        #regions = list(metadata['regions'])
+        try:
+            defaults['restriction_code_type'] = RestrictionCodeType(id=metadata['restriction_code_type'])
+        except:
+            pass
         
-        defaults['restriction_code_type'] = RestrictionCodeType(id=metadata['restriction_code_type'])
         defaults['constraints_other'] = metadata['constraints_other']
         defaults['license'] = License(id=metadata['license'])
         defaults['language'] = metadata['language']
-        defaults['spatial_representation_type'] = SpatialRepresentationType(id=metadata['spatial_representation_type'])
+        
+        try:
+            defaults['spatial_representation_type'] = SpatialRepresentationType(id=metadata['spatial_representation_type'])
+        except:
+            pass
         
         if (len(metadata['temporal_extent_start'])):
             try:
@@ -490,15 +510,38 @@ def file_upload(filename, name=None, user=None, title=None, abstract=None,
         if (metadata['is_published'] != False):
             defaults['is_published'] = True
         
-        # TODO: validate URL
-        defaults['thumbnail_url'] = metadata['thumbnail_url']
+        # make sure thumbnail URL is valid link to an image
+        if (len(metadata['thumbnail_url'])):
+            val = URLValidator()
+            try:
+                thumbnail_url = metadata['thumbnail_url']
+                val(thumbnail_url)
+                
+                if (thumbnail_url.lower().startswith(('http://', 'https://')) and thumbnail_url.lower().endswith(('.jpg', '.jpeg', '.png'))):
+                    print 'debug thumbnail_url'
+                    print thumbnail_url
+                    defaults['thumbnail_url'] = thumbnail_url
+            except ValidationError:
+                pass
         
-        #defaults['keywords'] = list(metadata['keywords'])
-        #defaults['poc'] = metadata['poc']
-        #defaults['metadata_author'] = metadata['metadata_author']
+        if (len(metadata['keywords'])):
+            keywords = [keyword.strip() for keyword in metadata['keywords'].split(',')]
         
-        defaults['category'] = TopicCategory(id=metadata['category_choice_field'])
-    #^^ end
+        if (len(metadata['regions'])):
+            regions_id = metadata['regions'].split(',')
+            for region_id in regions_id:
+                try:
+                    region = Region.objects.get(id=region_id)
+                    # store region code to be resolved below in resolve_regions()
+                    regions.append(region.code)
+                except Region.DoesNotExist:
+                    pass
+        
+        try:
+            defaults['category'] = TopicCategory(id=metadata['category_choice_field'])
+        except:
+            pass
+    #^^ end processing layer metadata
 
     # set metadata
     if 'xml' in files:
@@ -567,12 +610,32 @@ def file_upload(filename, name=None, user=None, title=None, abstract=None,
         if len(keywords) > 0:
             layer.keywords.add(*keywords)
 
+    #^^ start saving metadata point of contact, layer needs to exist first
+    if (metadata['poc'].isdigit()):
+        try:
+            contact = get_user_model().objects.get(id=metadata['poc'])
+            layer.poc = contact
+            layer.save()
+        except get_user_model().DoesNotExist:
+            pass
+    #^^ end
+    
+    #^^ start saving metadata author, layer needs to exist first
+    if (metadata['metadata_author'].isdigit()):
+        try:
+            author = get_user_model().objects.get(id=metadata['metadata_author'])
+            layer.metadata_author = author
+            layer.save()
+        except get_user_model().DoesNotExist:
+            pass
+    #^^ end
+    
     # Assign the regions (needs to be done after saving)
     regions_resolved = list(set(regions_resolved))
     if regions_resolved:
         if len(regions_resolved) > 0:
             layer.regions.add(*regions_resolved)
-
+    
     return layer
 
 
