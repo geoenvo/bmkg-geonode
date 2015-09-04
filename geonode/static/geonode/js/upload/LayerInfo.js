@@ -174,21 +174,27 @@ define(function (require, exports) {
         }
 
         console.log('=====> icraf_dr'); // #^^
-        console.log($('#form_icraf_dr [name="icraf_dr_category"]').val()) // #^^
-        console.log($('#form_icraf_dr [name="icraf_dr_coverage"]').val()) // #^^
-        console.log($('#form_icraf_dr [name="icraf_dr_source"]').val()) // #^^
-        console.log($('#form_icraf_dr [name="icraf_dr_year"]').val()) // #^^
-        form_data.append('icraf_dr_category', $('#form_icraf_dr [name="icraf_dr_category"]').val()); // #^^
-        form_data.append('icraf_dr_coverage', $('#form_icraf_dr [name="icraf_dr_coverage"]').val()); // #^^
-        form_data.append('icraf_dr_source', $('#form_icraf_dr [name="icraf_dr_source"]').val()); // #^^
-        form_data.append('icraf_dr_year', $('#form_icraf_dr [name="icraf_dr_year"]').val()); // #^^
+        console.log($('[name="icraf_dr_category"]').val()) // #^^
+        console.log($('[name="icraf_dr_coverage"]').val()) // #^^
+        console.log($('[name="icraf_dr_source"]').val()) // #^^
+        console.log($('[name="icraf_dr_year"]').val()) // #^^
+        console.log($('[name="icraf_dr_date_created"]').val()) // #^^
+        console.log($('[name="icraf_dr_date_published"]').val()) // #^^
+        console.log($('[name="icraf_dr_date_revised"]').val()) // #^^
+        form_data.append('icraf_dr_category', $('[name="icraf_dr_category"]').val()); // #^^
+        form_data.append('icraf_dr_coverage', $('[name="icraf_dr_coverage"]').val()); // #^^
+        form_data.append('icraf_dr_source', $('[name="icraf_dr_source"]').val()); // #^^
+        form_data.append('icraf_dr_year', $('[name="icraf_dr_year"]').val()); // #^^
+        form_data.append('icraf_dr_date_created', $('[name="icraf_dr_date_created"]').val()); // #^^
+        form_data.append('icraf_dr_date_published', $('[name="icraf_dr_date_published"]').val()); // #^^
+        form_data.append('icraf_dr_date_revised', $('[name="icraf_dr_date_revised"]').val()); // #^^
         
         console.log('=====> metadata'); // #^^
         console.log($('#form_metadata [name="resource-owner"]').val()) // #^^
         console.log($('#form_metadata [name="resource-title"]').val()) // #^^
-        console.log($('#form_metadata [name="resource-date"]').val()) // #^^
+        //console.log($('#form_metadata [name="resource-date"]').val()) // #^^ replaced by icraf_dr_date_created
         console.log($('#form_metadata [name="resource-date_type"]').val()) // #^^
-        console.log($('#form_metadata [name="resource-edition"]').val()) // #^^
+        //console.log($('#form_metadata [name="resource-edition"]').val()) // #^^ replaced by icraf_dr_year
         console.log($('#form_metadata [name="resource-abstract"]').val()) // #^^
         console.log($('#form_metadata [name="resource-purpose"]').val()) // #^^
         console.log($('#form_metadata [name="resource-maintenance_frequency"]').val()) // #^^
@@ -213,9 +219,9 @@ define(function (require, exports) {
         console.log($('#form_metadata [name="category_choice_field"]:checked').val()) // #^^
         form_data.append('owner', $('#form_metadata [name="resource-owner"]').val()); // #^^
         form_data.append('title', $('#form_metadata [name="resource-title"]').val()); // #^^
-        form_data.append('date', $('#form_metadata [name="resource-date"]').val()); // #^^
+        //form_data.append('date', $('#form_metadata [name="resource-date"]').val()); // #^^ replaced by icraf_dr_created_date
         form_data.append('date_type', $('#form_metadata [name="resource-date_type"]').val()); // #^^
-        form_data.append('edition', $('#form_metadata [name="resource-edition"]').val()); // #^^
+        //form_data.append('edition', $('#form_metadata [name="resource-edition"]').val()); // #^^ replaced by icraf_dr_year
         form_data.append('abstract', $('#form_metadata [name="resource-abstract"]').val()); // #^^
         form_data.append('purpose', $('#form_metadata [name="resource-purpose"]').val()); // #^^
         form_data.append('maintenance_frequency', $('#form_metadata [name="resource-maintenance_frequency"]').val()); // #^^

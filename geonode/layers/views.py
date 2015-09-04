@@ -175,14 +175,28 @@ def layer_upload(request, template='upload/layer_upload.html'):
                 # exceptions when unicode characters are present.
                 # This should be followed up in upstream Django.
                 
+                icraf_dr_category =Category.objects.get(pk=request.POST['icraf_dr_category']) #^^
+                icraf_dr_coverage =Coverage.objects.get(pk=request.POST['icraf_dr_coverage']) #^^
+                icraf_dr_source =Source.objects.get(pk=request.POST['icraf_dr_source']) #^^
+                icraf_dr_year =Year.objects.get(pk=request.POST['icraf_dr_year']) #^^
+                icraf_dr_date_created = request.POST['icraf_dr_date_created'] #^^
+                icraf_dr_date_published = request.POST['icraf_dr_date_published'] #^^
+                icraf_dr_date_revised = request.POST['icraf_dr_date_revised'] #^^
+                
                 main = Main( #^^
-                    category=Category.objects.get(pk=request.POST['icraf_dr_category']), #^^
-                    coverage=Coverage.objects.get(pk=request.POST['icraf_dr_coverage']), #^^
-                    source=Source.objects.get(pk=request.POST['icraf_dr_source']), #^^
-                    year=Year.objects.get(pk=request.POST['icraf_dr_year']), #^^
-                    basename=name_base #^^
+                    category=icraf_dr_category, #^^
+                    coverage=icraf_dr_coverage, #^^
+                    source=icraf_dr_source, #^^
+                    year=icraf_dr_year, #^^
+                    basename=name_base, #^^
+                    topic_category = TopicCategory(id=request.POST['category_choice_field']), #^^
+                    regions = request.POST['regions'], #^^
+                    date_created=icraf_dr_date_created, #^^
+                    date_published=icraf_dr_date_published, #^^
+                    date_revised=icraf_dr_date_revised #^^
                 ) #^^
                 
+                #^^ save icraf_dr_main and pass id to file_upload below
                 main.save() #^^
                 main_id = main.id #^^
                 
@@ -190,9 +204,11 @@ def layer_upload(request, template='upload/layer_upload.html'):
                 form_metadata = json.dumps({ #^^
                     'owner': request.POST['owner'], #^^
                     'title': request.POST['title'], #^^
-                    'date': request.POST['date'], #^^
+                    #'date': request.POST['date'], #^^ replaced_by icraf_dr_date_created
+                    'date': icraf_dr_date_created, #^^
                     'date_type': request.POST['date_type'], #^^
-                    'edition': request.POST['edition'], #^^
+                    #'edition': request.POST['edition'], #^^ replaced by icraf_dr_year
+                    'edition': str(icraf_dr_year.year_num), #^^
                     'abstract': request.POST['abstract'], #^^
                     'purpose': request.POST['purpose'], #^^
                     'maintenance_frequency': request.POST['maintenance_frequency'], #^^

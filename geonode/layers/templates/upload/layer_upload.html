@@ -112,7 +112,7 @@
             <form id="form_icraf_dr">
               <div class="col-md-6 form-controls">
                 <div class="form-group">
-                  <label for="icraf_dr_category" class="control-label">{% trans "Select category:" %}</label>
+                  <label for="icraf_dr_category" class="control-label">{% trans "Category" %}</label>
                   <select id="icraf_dr_category" class="form-control" name="icraf_dr_category">
                     {% for category in categories %}
                     <option value={{ category.id }}>{{ category }}</option>
@@ -120,29 +120,33 @@
                   </select>
                 </div>
                 <div class="form-group">
-                  <label for="icraf_dr_coverage" class="control-label">{% trans "Select coverage:" %}</label>
+                  <label for="icraf_dr_coverage" class="control-label">{% trans "Coverage" %}</label>
                   <select id="icraf_dr_coverage" class="form-control" name="icraf_dr_coverage">
                     {% for coverage in coverages %}
                     <option value={{ coverage.id }}>{{ coverage }}</option>
                     {% endfor %}
                   </select>
                 </div>
+                <!-- # moved to metadata form group
                 <div class="form-group">
-                  <label for="icraf_dr_source" class="control-label">{% trans "Select source:" %}</label>
+                  <label for="icraf_dr_source" class="control-label">{% trans "Source" %}</label>
                   <select id="icraf_dr_source" class="form-control" name="icraf_dr_source">
                     {% for source in sources %}
                     <option value={{ source.id }}>{{ source }}</option>
                     {% endfor %}
                   </select>
                 </div>
+                -->
+                <!-- # replaces resource-edition metadata
                 <div class="form-group">
-                  <label for="icraf_dr_year" class="control-label">{% trans "Select year:" %}</label>
+                  <label for="icraf_dr_year" class="control-label">{% trans "Year" %}</label>
                   <select id="icraf_dr_year" class="form-control" name="icraf_dr_year">
                     {% for year in years %}
                     <option value={{ year.id }}>{{ year }}</option>
                     {% endfor %}
                   </select>
                 </div>
+                -->
               </div>
             </form>
           </div>
@@ -170,17 +174,64 @@
                   <label for="{{ layer_form.title.id_for_label }}" class="control-label required-field">{% trans layer_form.title.label %}</label>
                   {{ layer_form.title|add_class:"form-control" }}
                 </div>
+                <!-- # resource-date replaced with icraf_dr_date_created
                 <div class="form-group">
                   <label for="{{ layer_form.date.id_for_label }}" class="control-label required-field">{% trans layer_form.date.label %}</label>
                   {{ layer_form.date|add_class:"form-control" }}
+                </div>
+                -->
+                <div class="form-group">
+                  <label for="icraf_dr_date_created" class="control-label required-field">{% trans "Date created" %}</label>
+                  <div class="input-group date" id="icraf_dr_date_created_picker">
+                    <input id="icraf_dr_date_created" class="form-control" name="icraf_dr_date_created" type="text" value="{% now "Y-m-d H:i" %}">
+                    <span class="input-group-addon">
+                      <span class="fa fa-calendar"></span>
+                    </span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="icraf_dr_date_published" class="control-label">{% trans "Date published" %}</label>
+                  <div class="input-group date" id="icraf_dr_date_published_picker">
+                    <input id="icraf_dr_date_published" class="form-control" name="icraf_dr_date_published" type="text">
+                    <span class="input-group-addon">
+                      <span class="fa fa-calendar"></span>
+                    </span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="icraf_dr_date_revised" class="control-label">{% trans "Date revised" %}</label>
+                  <div class="input-group date" id="icraf_dr_date_revised_picker">
+                    <input id="icraf_dr_date_revised" class="form-control" name="icraf_dr_date_revised" type="text">
+                    <span class="input-group-addon">
+                      <span class="fa fa-calendar"></span>
+                    </span>
+                  </div>
                 </div>
                 <div class="form-group">
                   <label for="{{ layer_form.date_type.id_for_label }}" class="control-label required-field">{% trans layer_form.date_type.label %}</label>
                   {{ layer_form.date_type|add_class:"form-control" }}
                 </div>
+                <!-- # resource-edition metadata replaced with icraf_dr_year
                 <div class="form-group">
                   <label for="{{ layer_form.edition.id_for_label }}" class="control-label">{% trans layer_form.edition.label %}</label>
                   {{ layer_form.edition|add_class:"form-control" }}
+                </div>
+                -->
+                <div class="form-group">
+                  <label for="icraf_dr_year" class="control-label required-field">{% trans "Year" %}</label>
+                  <select id="icraf_dr_year" class="form-control" name="icraf_dr_year">
+                    {% for year in years %}
+                    <option value={{ year.id }}>{{ year }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="icraf_dr_source" class="control-label">{% trans "Select source:" %}</label>
+                  <select id="icraf_dr_source" class="form-control" name="icraf_dr_source">
+                    {% for source in sources %}
+                    <option value={{ source.id }}>{{ source }}</option>
+                    {% endfor %}
+                  </select>
                 </div>
                 <div class="form-group">
                   <label for="{{ layer_form.abstract.id_for_label }}" class="control-label">{% trans layer_form.abstract.label %}</label>
@@ -323,6 +374,7 @@
 
 
 {% block extra_script %}
+{% include 'metadata_form_js.html' %} 
 <script src="{{ STATIC_URL }}js/custom_upload.js"></script>
 <script data-main="{% static 'geonode/js/upload/main' %}" 
   src="{% static 'lib/js/require.js' %}">
@@ -340,7 +392,6 @@
 {% endautoescape %}
 
 </script>
-{% include 'metadata_form_js.html' %} 
 {% if GEONODE_SECURITY_ENABLED %}
 {% with resource=layer %}
 {% include "_permissions_form_js.html" %}

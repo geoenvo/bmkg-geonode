@@ -58,7 +58,7 @@ from django.core.validators import URLValidator #^^
 from django.core.exceptions import ValidationError #^^
 from geonode.layers.models import LayerFile #^^
 from geonode.base.models import RestrictionCodeType, License #^^
-from geonode.people.forms import ProfileForm
+from icraf_dr.models import Main #^^
 
 logger = logging.getLogger('geonode.layers.utils')
 
@@ -627,6 +627,16 @@ def file_upload(filename, name=None, user=None, title=None, abstract=None,
             layer.metadata_author = author
             layer.save()
         except get_user_model().DoesNotExist:
+            pass
+    #^^ end
+    
+    #^^ start saving icraf_dr_main's Layer reference key
+    if main_id != None:
+        try:
+            main = Main.objects.get(id=main_id)
+            main.layer = layer
+            main.save()
+        except:
             pass
     #^^ end
     
