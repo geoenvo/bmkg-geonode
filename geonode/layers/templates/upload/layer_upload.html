@@ -226,7 +226,7 @@
                   </select>
                 </div>
                 <div class="form-group">
-                  <label for="icraf_dr_source" class="control-label">{% trans "Select source:" %}</label>
+                  <label for="icraf_dr_source" class="control-label required-field">{% trans "Source" %}</label>
                   <select id="icraf_dr_source" class="form-control" name="icraf_dr_source">
                     {% for source in sources %}
                     <option value={{ source.id }}>{{ source }}</option>
@@ -234,7 +234,7 @@
                   </select>
                 </div>
                 <div class="form-group">
-                  <label for="{{ layer_form.abstract.id_for_label }}" class="control-label">{% trans layer_form.abstract.label %}</label>
+                  <label for="{{ layer_form.abstract.id_for_label }}" class="control-label required-field">{% trans layer_form.abstract.label %}</label>
                   {{ layer_form.abstract|add_class:"form-control" }}
                 </div>
                 <div class="form-group">
@@ -246,7 +246,7 @@
                   {{ layer_form.maintenance_frequency|add_class:"form-control" }}
                 </div>
                 <div class="form-group">
-                  <label for="{{ layer_form.regions.id_for_label }}" class="control-label">{% trans layer_form.regions.label %}</label>
+                  <label for="{{ layer_form.regions.id_for_label }}" class="control-label required-field">{% trans layer_form.regions.label %}</label>
                   {{ layer_form.regions|add_class:"form-control" }}
                 </div>
                 <div class="form-group">
@@ -290,7 +290,7 @@
                   {{ layer_form.distribution_description|add_class:"form-control" }}
                 </div>
                 <div class="form-group">
-                  <label for="{{ layer_form.data_quality_statement.id_for_label }}" class="control-label">{% trans layer_form.data_quality_statement.label %}</label>
+                  <label for="{{ layer_form.data_quality_statement.id_for_label }}" class="control-label required-field">{% trans layer_form.data_quality_statement.label %}</label>
                   {{ layer_form.data_quality_statement|add_class:"form-control" }}
                 </div>
                 <div class="form-group">
@@ -308,7 +308,7 @@
                   {{ layer_form.thumbnail_url|add_class:"form-control" }}
                 </div>
                 <div class="form-group">
-                  <label for="{{ layer_form.keywords.id_for_label }}" class="control-label">{% trans layer_form.keywords.label %}</label>
+                  <label for="{{ layer_form.keywords.id_for_label }}" class="control-label required-field">{% trans layer_form.keywords.label %}</label>
                   {{ layer_form.keywords|add_class:"form-control" }}
                 </div>
                 <div class="form-group">

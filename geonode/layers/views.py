@@ -59,6 +59,7 @@ from geonode.utils import build_social_links
 from geonode.geoserver.helpers import cascading_delete, gs_catalog
 
 from icraf_dr.models import Category, Coverage, Source, Year, Main #^^
+from dateutil.parser import * #^^
 
 CONTEXT_LOG_FILE = None
 
@@ -182,6 +183,31 @@ def layer_upload(request, template='upload/layer_upload.html'):
                 icraf_dr_date_created = request.POST['icraf_dr_date_created'] #^^
                 icraf_dr_date_published = request.POST['icraf_dr_date_published'] #^^
                 icraf_dr_date_revised = request.POST['icraf_dr_date_revised'] #^^
+                
+                #^^ validate date format
+                if (len(icraf_dr_date_created)): #^^
+                    try: #^^
+                        parse(icraf_dr_date_created) #^^
+                    except ValueError: #^^
+                        icraf_dr_date_created = None #^^
+                else: #^^
+                    icraf_dr_date_created = None #^^
+                
+                if (len(icraf_dr_date_published)): #^^
+                    try: #^^
+                        parse(icraf_dr_date_published) #^^
+                    except ValueError: #^^
+                        icraf_dr_date_published = None #^^
+                else: #^^
+                    icraf_dr_date_published = None #^^
+                
+                if (len(icraf_dr_date_revised)): #^^
+                    try: #^^
+                        parse(icraf_dr_date_revised) #^^
+                    except ValueError: #^^
+                        icraf_dr_date_revised = None #^^
+                else: #^^
+                    icraf_dr_date_revised = None #^^
                 
                 main = Main( #^^
                     category=icraf_dr_category, #^^
