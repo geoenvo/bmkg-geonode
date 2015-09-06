@@ -127,23 +127,23 @@ def _resolve_layer(request, typename, permission='base.view_resourcebase',
 def layer_upload(request, template='upload/layer_upload.html'):
     if request.method == 'GET':
         
-        ##categories = Category.objects.all() #^^
-        categories = Category.objects.order_by('cat_num') #^^
-        ##coverages = Coverage.objects.all() #^^
-        coverages = Coverage.objects.order_by('cov_num') #^^
-        ##sources = Source.objects.all() #^^
-        sources = Source.objects.order_by('src_num') #^^
-        ##years = Year.objects.all() #^^
-        years = Year.objects.order_by('year_num') #^^
+        ##icraf_dr_categories = Category.objects.all() #^^
+        icraf_dr_categories = Category.objects.order_by('cat_num') #^^
+        ##icraf_dr_coverages = Coverage.objects.all() #^^
+        icraf_dr_coverages = Coverage.objects.order_by('cov_num') #^^
+        ##icraf_dr_sources = Source.objects.all() #^^
+        icraf_dr_sources = Source.objects.order_by('src_num') #^^
+        ##icraf_dr_years = Year.objects.all() #^^
+        icraf_dr_years = Year.objects.order_by('year_num') #^^
         
         layer_form = LayerForm(prefix="resource") #^^
         category_form = CategoryForm(prefix="category_choice_field") #^^
         
         ctx = {
-            'categories': categories, #^^
-            'coverages': coverages, #^^
-            'sources': sources, #^^
-            'years': years, #^^
+            'icraf_dr_categories': icraf_dr_categories, #^^
+            'icraf_dr_coverages': icraf_dr_coverages, #^^
+            'icraf_dr_sources': icraf_dr_sources, #^^
+            'icraf_dr_years': icraf_dr_years, #^^
             "layer_form": layer_form, #^^
             "category_form": category_form, #^^
             'charsets': CHARSETS,
@@ -428,7 +428,58 @@ def layer_metadata(request, layername, template='layers/layer_metadata.html'):
     metadata_author = layer.metadata_author
 
     if request.method == "POST":
-        layer_form = LayerForm(request.POST, instance=layer, prefix="resource")
+        icraf_dr_category =Category.objects.get(pk=request.POST['icraf_dr_category']) #^^
+        icraf_dr_coverage =Coverage.objects.get(pk=request.POST['icraf_dr_coverage']) #^^
+        icraf_dr_source =Source.objects.get(pk=request.POST['icraf_dr_source']) #^^
+        icraf_dr_year =Year.objects.get(pk=request.POST['icraf_dr_year']) #^^
+        icraf_dr_date_created = request.POST['icraf_dr_date_created'] #^^
+        icraf_dr_date_published = request.POST['icraf_dr_date_published'] #^^
+        icraf_dr_date_revised = request.POST['icraf_dr_date_revised'] #^^
+        
+        #^^ validate date format
+        if (len(icraf_dr_date_created)): #^^
+            try: #^^
+                parse(icraf_dr_date_created) #^^
+            except ValueError: #^^
+                icraf_dr_date_created = None #^^
+        else: #^^
+            icraf_dr_date_created = None #^^
+        
+        if (len(icraf_dr_date_published)): #^^
+            try: #^^
+                parse(icraf_dr_date_published) #^^
+            except ValueError: #^^
+                icraf_dr_date_published = None #^^
+        else: #^^
+            icraf_dr_date_published = None #^^
+        
+        if (len(icraf_dr_date_revised)): #^^
+            try: #^^
+                parse(icraf_dr_date_revised) #^^
+            except ValueError: #^^
+                icraf_dr_date_revised = None #^^
+        else: #^^
+            icraf_dr_date_revised = None #^^
+        
+        Main.objects.filter(layer=layer).update( #^^
+            category=icraf_dr_category, #^^
+            coverage=icraf_dr_coverage, #^^
+            source=icraf_dr_source, #^^
+            year=icraf_dr_year, #^^
+            topic_category = TopicCategory(id=request.POST['category_choice_field']), #^^
+            regions = ','.join(request.POST.getlist('resource-regions')), #^^ save as comma separated ids
+            date_created=icraf_dr_date_created, #^^
+            date_published=icraf_dr_date_published, #^^
+            date_revised=icraf_dr_date_revised #^^
+        ) #^^
+        
+        #^^ override resource-date with icraf_dr_date_created
+        #^^ override resource-edition with icraf_dr_year
+        request_post = request.POST.copy() #^^
+        request_post['resource-date'] = icraf_dr_date_created #^^
+        request_post['resource-edition'] = icraf_dr_year.year_num #^^
+        
+        layer_form = LayerForm(request_post, instance=layer, prefix="resource") #^^ replace request.POST
         attribute_form = layer_attribute_set(
             request.POST,
             instance=layer,
@@ -448,6 +499,11 @@ def layer_metadata(request, layername, template='layers/layer_metadata.html'):
         category_form = CategoryForm(
             prefix="category_choice_field",
             initial=topic_category.id if topic_category else None)
+        icraf_dr_categories = Category.objects.order_by('cat_num') #^^
+        icraf_dr_coverages = Coverage.objects.order_by('cov_num') #^^
+        icraf_dr_sources = Source.objects.order_by('src_num') #^^
+        icraf_dr_years = Year.objects.order_by('year_num') #^^
+        icraf_dr_main = Main.objects.get(layer=layer) #^^
 
     if request.method == "POST" and layer_form.is_valid(
     ) and attribute_form.is_valid() and category_form.is_valid():
@@ -532,6 +588,11 @@ def layer_metadata(request, layername, template='layers/layer_metadata.html'):
         "author_form": author_form,
         "attribute_form": attribute_form,
         "category_form": category_form,
+        'icraf_dr_categories': icraf_dr_categories, #^^
+        'icraf_dr_coverages': icraf_dr_coverages, #^^
+        'icraf_dr_sources': icraf_dr_sources, #^^
+        'icraf_dr_years': icraf_dr_years, #^^
+        'icraf_dr_main': icraf_dr_main, #^^
     }))
 
 

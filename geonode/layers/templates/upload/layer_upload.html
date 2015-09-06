@@ -1,7 +1,7 @@
 {% extends "upload/layer_upload_base.html" %}
 {% load i18n %}
 {% load staticfiles %}
-{% load icraf_dr_tags %}
+{% load icraf_dr_tags %} {# #^^ #}
 
 {% block title %} {% trans "Upload Layer"  %} - {{ block.super }}  {% endblock %}
 
@@ -114,16 +114,16 @@
                 <div class="form-group">
                   <label for="icraf_dr_category" class="control-label">{% trans "Category" %}</label>
                   <select id="icraf_dr_category" class="form-control" name="icraf_dr_category">
-                    {% for category in categories %}
-                    <option value={{ category.id }}>{{ category }}</option>
+                    {% for icraf_dr_category in icraf_dr_categories %}
+                    <option value={{ icraf_dr_category.id }}>{{ icraf_dr_category }}</option>
                     {% endfor %}
                   </select>
                 </div>
                 <div class="form-group">
                   <label for="icraf_dr_coverage" class="control-label">{% trans "Coverage" %}</label>
                   <select id="icraf_dr_coverage" class="form-control" name="icraf_dr_coverage">
-                    {% for coverage in coverages %}
-                    <option value={{ coverage.id }}>{{ coverage }}</option>
+                    {% for icraf_dr_coverage in icraf_dr_coverages %}
+                    <option value={{ icraf_dr_coverage.id }}>{{ icraf_dr_coverage }}</option>
                     {% endfor %}
                   </select>
                 </div>
@@ -131,8 +131,8 @@
                 <div class="form-group">
                   <label for="icraf_dr_source" class="control-label">{% trans "Source" %}</label>
                   <select id="icraf_dr_source" class="form-control" name="icraf_dr_source">
-                    {% for source in sources %}
-                    <option value={{ source.id }}>{{ source }}</option>
+                    {% for icraf_dr_source in icraf_dr_sources %}
+                    <option value={{ icraf_dr_source.id }}>{{ icraf_dr_source }}</option>
                     {% endfor %}
                   </select>
                 </div>
@@ -141,8 +141,8 @@
                 <div class="form-group">
                   <label for="icraf_dr_year" class="control-label">{% trans "Year" %}</label>
                   <select id="icraf_dr_year" class="form-control" name="icraf_dr_year">
-                    {% for year in years %}
-                    <option value={{ year.id }}>{{ year }}</option>
+                    {% for icraf_dr_year in icraf_dr_years %}
+                    <option value={{ icraf_dr_year.id }}>{{ icraf_dr_year }}</option>
                     {% endfor %}
                   </select>
                 </div>
@@ -220,16 +220,16 @@
                 <div class="form-group">
                   <label for="icraf_dr_year" class="control-label required-field">{% trans "Year" %}</label>
                   <select id="icraf_dr_year" class="form-control" name="icraf_dr_year">
-                    {% for year in years %}
-                    <option value={{ year.id }}>{{ year }}</option>
+                    {% for icraf_dr_year in icraf_dr_years %}
+                    <option value={{ icraf_dr_year.id }}>{{ icraf_dr_year }}</option>
                     {% endfor %}
                   </select>
                 </div>
                 <div class="form-group">
                   <label for="icraf_dr_source" class="control-label required-field">{% trans "Source" %}</label>
                   <select id="icraf_dr_source" class="form-control" name="icraf_dr_source">
-                    {% for source in sources %}
-                    <option value={{ source.id }}>{{ source }}</option>
+                    {% for icraf_dr_source in icraf_dr_sources %}
+                    <option value={{ icraf_dr_source.id }}>{{ icraf_dr_source }}</option>
                     {% endfor %}
                   </select>
                 </div>
@@ -375,7 +375,7 @@
 
 {% block extra_script %}
 {% include 'metadata_form_js.html' %} 
-<script src="{{ STATIC_URL }}js/custom_upload.js"></script>
+<script src="{{ STATIC_URL }}js/custom_layer_upload.js"></script>
 <script data-main="{% static 'geonode/js/upload/main' %}" 
   src="{% static 'lib/js/require.js' %}">
 </script>
