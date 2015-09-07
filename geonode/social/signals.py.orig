@@ -159,13 +159,10 @@ if notification_app:
         """
         notice_type_label = '%s_created' if created else '%s_updated'
         notice_type_label = notice_type_label % instance.class_name.lower()
-            
-        #^^ do not send notification for layer_created, do it manually on upload
-        if notice_type_label != 'layer_created': #^^
-            recipients = get_notification_recipients(notice_type_label)
-            notification.send(recipients, notice_type_label, {'resource': instance})
+        recipients = get_notification_recipients(notice_type_label)
+        notification.send(recipients, notice_type_label, {'resource': instance})
 
-            send_queued_notifications.delay()
+        send_queued_notifications.delay()
 
     def notification_post_delete_resource(instance, sender, **kwargs):
         """ Send a notification when a layer, map or document is deleted
