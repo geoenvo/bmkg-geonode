@@ -59,6 +59,9 @@ from django.core.exceptions import ValidationError #^^
 from geonode.layers.models import LayerFile #^^
 from geonode.base.models import RestrictionCodeType, License #^^
 from icraf_dr.models import Main #^^
+from geonode.groups.models import GroupProfile #^^
+if 'notification' in settings.INSTALLED_APPS: #^^
+    from notification import models as notification #^^
 
 logger = logging.getLogger('geonode.layers.utils')
 
@@ -645,6 +648,25 @@ def file_upload(filename, name=None, user=None, title=None, abstract=None,
     if regions_resolved:
         if len(regions_resolved) > 0:
             layer.regions.add(*regions_resolved)
+    
+    #^^ start send email notification to 'Pengelola Basis Data' group managers
+    if 'notification' in settings.INSTALLED_APPS:
+        try:
+            group_approver = GroupProfile.objects.get(title='Pengelola Basis Data')
+            if group_approver:
+                group_managers = group_approver.get_managers()
+                if group_managers:
+                    print 'debug group_approver.title'
+                    print group_approver.title
+                    print group_managers
+                    notif_ctx = {
+                        'resource': layer,
+                    }
+                    print 'sending notification'
+                    notification.send(group_managers, 'layer_created', notif_ctx)
+        except:
+            pass
+    #^^ end
     
     return layer
 
