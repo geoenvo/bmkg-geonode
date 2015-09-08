@@ -524,7 +524,10 @@ def layer_metadata(request, layername, template='layers/layer_metadata.html'):
         icraf_dr_coverages = Coverage.objects.order_by('cov_num') #^^
         icraf_dr_sources = Source.objects.order_by('src_num') #^^
         icraf_dr_years = Year.objects.order_by('year_num') #^^
-        icraf_dr_main = Main.objects.get(layer=layer) #^^
+        try:
+            icraf_dr_main = Main.objects.get(layer=layer) #^^
+        except:
+            icraf_dr_main = None
 
     if request.method == "POST" and layer_form.is_valid(
     ) and attribute_form.is_valid() and category_form.is_valid():
