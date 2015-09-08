@@ -461,17 +461,38 @@ def layer_metadata(request, layername, template='layers/layer_metadata.html'):
         else: #^^
             icraf_dr_date_revised = None #^^
         
-        Main.objects.filter(layer=layer).update( #^^
-            category=icraf_dr_category, #^^
-            coverage=icraf_dr_coverage, #^^
-            source=icraf_dr_source, #^^
-            year=icraf_dr_year, #^^
-            topic_category = TopicCategory(id=request.POST['category_choice_field']), #^^
-            regions = ','.join(request.POST.getlist('resource-regions')), #^^ save as comma separated ids
-            date_created=icraf_dr_date_created, #^^
-            date_published=icraf_dr_date_published, #^^
-            date_revised=icraf_dr_date_revised #^^
-        ) #^^
+        try: #^^
+            main_topic_category = TopicCategory(id=request.POST['category_choice_field']) #^^
+        except: #^^
+            main_topic_category = None #^^
+        
+        main_regions = ','.join(request.POST.getlist('resource-regions')) #^^ save as comma separated ids
+        
+        main_defaults = { #^^
+            'category': icraf_dr_category, #^^
+            'coverage': icraf_dr_coverage, #^^
+            'source': icraf_dr_source, #^^
+            'year': icraf_dr_year, #^^
+            'topic_category': main_topic_category, #^^
+            'regions': main_regions, #^^
+            'date_created': icraf_dr_date_created, #^^
+            'date_published': icraf_dr_date_published, #^^
+            'date_revised': icraf_dr_date_revised #^^
+        } #^^
+        
+        main, main_created = Main.objects.get_or_create(layer=layer, defaults=main_defaults) #^^
+        
+        if not main_created: #^^
+            main.category = icraf_dr_category #^^
+            main.coverage = icraf_dr_coverage #^^
+            main.source = icraf_dr_source #^^
+            main.year = icraf_dr_year #^^
+            main.topic_category = main_topic_category #^^
+            main.regions = main_regions #^^
+            main.date_created = icraf_dr_date_created #^^
+            main.date_published = icraf_dr_date_published #^^
+            main.date_revised = icraf_dr_date_revised #^^
+            main.save() #^^
         
         #^^ override resource-date with icraf_dr_date_created
         #^^ override resource-edition with icraf_dr_year
