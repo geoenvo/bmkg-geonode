@@ -277,6 +277,9 @@ def layer_upload(request, template='upload/layer_upload.html'):
                 )
 
             except Exception as e:
+                print 'debug layer creation failed, deleting main' #^^
+                main.delete() #^^
+                
                 exception_type, error, tb = sys.exc_info()
                 logger.exception(e)
                 out['success'] = False
@@ -796,6 +799,8 @@ def layer_remove(request, layername, template='layers/layer_remove.html'):
         }))
     if (request.method == 'POST'):
         try:
+            main = Main.objects.get(layer=layer) #^^
+            main.delete() #^^
             delete_layer.delay(object_id=layer.id)
         except Exception as e:
             message = '{0}: {1}.'.format(_('Unable to delete layer'), layer.typename)
