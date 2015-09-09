@@ -60,6 +60,10 @@ from geonode.geoserver.helpers import cascading_delete, gs_catalog
 
 from icraf_dr.models import Category, Coverage, Source, Year, Main #^^
 from dateutil.parser import * #^^
+from geonode.layers.models import LayerFile #^^
+from django.shortcuts import get_object_or_404 #^^
+import csv #^^
+from dbfpy import dbf #^^
 
 CONTEXT_LOG_FILE = None
 
@@ -377,6 +381,19 @@ def layer_detail(request, layername, template='layers/layer_detail.html'):
     metadata = layer.link_set.metadata().filter(
         name__in=settings.DOWNLOAD_FORMATS_METADATA)
 
+    #^^ start check if layer's dbf file is within limits for conversion
+    print 'debug'
+    MAX_CONVERT_MB = settings.MAX_DOCUMENT_SIZE
+    try:
+        layer_dbf = LayerFile.objects.get(upload_session=layer.upload_session, name='dbf')
+        layer_dbf_path = settings.PROJECT_ROOT + layer_dbf.file.url
+        print layer_dbf_path
+        if (os.path.getsize(layer_dbf_path) / 1024 / 1024) > MAX_CONVERT_MB:
+            layer_dbf = None
+    except LayerFile.DoesNotExist:
+        layer_dbf = None
+    #^^ end
+    
     context_dict = {
         "resource": layer,
         'perms_list': get_perms(request.user, layer.get_self_resource()),
@@ -385,6 +402,7 @@ def layer_detail(request, layername, template='layers/layer_detail.html'):
         "metadata": metadata,
         "is_layer": True,
         "wps_enabled": settings.OGC_SERVER['default']['WPS_ENABLED'],
+        'layer_dbf': layer_dbf #^^
     }
 
     context_dict["viewer"] = json.dumps(
@@ -408,7 +426,59 @@ def layer_detail(request, layername, template='layers/layer_detail.html'):
 
     return render_to_response(template, RequestContext(request, context_dict))
 
-
+#^^ start
+def layer_view(request, layerfile_id):
+    layer_dbf = get_object_or_404(LayerFile, pk=layerfile_id)
+    
+    viewerjs_path = '/static/js/viewerjs/#../../..'
+    input_file_path = settings.PROJECT_ROOT + layer_dbf.file.url
+    output_dir = 'tmpdoc/'
+    output_path = settings.MEDIA_ROOT + '/' + output_dir
+    output_format = None
+    
+    # don't convert if doc file is too big
+    MAX_CONVERT_MB = settings.MAX_DOCUMENT_SIZE
+    if (os.path.getsize(input_file_path) / 1024 / 1024) > MAX_CONVERT_MB:
+        return HttpResponse("Not allowed", status=403)
+    
+    if input_file_path.lower().endswith('dbf'): # csv format supported by recline.js
+        document_title = layer_dbf.name
+        document_url = layer_dbf.file.url
+        
+        output_format = 'csv'
+        output_file = os.path.basename(os.path.splitext(input_file_path)[0]) + '.' + output_format
+        output_file_path = output_path + output_file
+        
+        with open(output_file_path, 'wb') as csv_file:
+            in_db = dbf.Dbf(input_file_path)
+            out_csv = csv.writer(csv_file)
+            column_header = []
+            
+            for field in in_db.header.fields:
+                column_header.append(field.name)
+            
+            out_csv.writerow(column_header)
+            
+            for rec in in_db:
+                out_csv.writerow(rec.fieldData)
+            
+            in_db.close()
+            document_url = settings.MEDIA_URL + output_dir + output_file
+        
+        return render_to_response(
+            "documents/document_view_recline.html",
+            RequestContext(
+                request,
+                {
+                    'document_title': document_title,
+                    'document_url': document_url,
+                }
+            )
+        )
+    else:
+        return HttpResponse("Not allowed", status=403)
+#^^ end
+    
 @login_required
 def layer_metadata(request, layername, template='layers/layer_metadata.html'):
     layer = _resolve_layer(

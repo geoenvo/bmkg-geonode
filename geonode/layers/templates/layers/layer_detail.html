@@ -108,6 +108,12 @@
               </table>
           {% endif %}
         </article>
+        
+        {% if layer_dbf %}
+        <article id="layerdata" class="tab-pane">
+          <iframe data-src="{% url "layer_view" layer_dbf.id %}" data-loaded="false" style="border:0;" width="750" height="400"></iframe>
+        </article>
+        {% endif %}
 
         {% block social_links %}
         {% if SOCIAL_BUTTONS %}
@@ -385,7 +391,7 @@
 {% endblock %}
 
 {% block extra_script %}
-
+    <script src="{{ STATIC_URL }}js/custom_layer_detail.js"></script>
     {% if GEOGIG_ENABLED and resource.link_set.geogig %}
         {% with "_geogig_scripts.html" as geogig_scripts_template %}
             {% include  geogig_scripts_template %}

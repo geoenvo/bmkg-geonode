@@ -95,12 +95,19 @@ def document_detail(request, docid):
         metadata = document.link_set.metadata().filter(
             name__in=settings.DOWNLOAD_FORMATS_METADATA)
 
+        viewdoc = True #^^
+        doc_file_path = settings.PROJECT_ROOT + document.doc_file.url #^^
+        MAX_CONVERT_MB = settings.MAX_DOCUMENT_SIZE #^^
+        if (os.path.getsize(doc_file_path) / 1024 / 1024) > MAX_CONVERT_MB: #^^
+            viewdoc = False #^^
+        
         context_dict = {
             'perms_list': get_perms(request.user, document.get_self_resource()),
             'permissions_json': _perms_info_json(document),
             'resource': document,
             'metadata': metadata,
             'imgtypes': IMGTYPES,
+            'viewdoc': viewdoc, #^^
             'viewtypes': ['csv', 'xls', 'odt', 'odp', 'ods', 'pdf', 'doc', 'docx', 'ppt', 'pptx', 'xlsx', 'dbf'], #^^
             'related': related}
 
@@ -150,6 +157,12 @@ def document_view(request, docid):
     input_file_path = settings.PROJECT_ROOT + document.doc_file.url
     output_dir = 'tmpdoc/'
     output_path = settings.MEDIA_ROOT + '/' + output_dir
+    output_format = None
+    
+    # don't convert if doc file is too big, send straight to download
+    MAX_CONVERT_MB = settings.MAX_DOCUMENT_SIZE
+    if (os.path.getsize(input_file_path) / 1024 / 1024) > MAX_CONVERT_MB:
+        return HttpResponseRedirect(document.doc_file.url)
     
     if document.extension in ['csv', 'dbf']: # csv format supported by recline.js
         document_title = document.title
@@ -187,14 +200,12 @@ def document_view(request, docid):
             )
         )
     elif document.extension in ['doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx']: # files convertable with unoconv
-        MAX_CONVERT_MB = settings.MAX_DOCUMENT_SIZE
-        
         # don't convert if doc file is too big, send straight to download
-        if (os.path.getsize(input_file_path) / 1024 / 1024) > MAX_CONVERT_MB:
-            return HttpResponseRedirect(document.doc_file.url)
-            #return HttpResponseRedirect(viewerjs_path + document.doc_file.url)
+        #MAX_CONVERT_MB = settings.MAX_DOCUMENT_SIZE
+        #if (os.path.getsize(input_file_path) / 1024 / 1024) > MAX_CONVERT_MB:
+        #    return HttpResponseRedirect(document.doc_file.url)
+        #    #return HttpResponseRedirect(viewerjs_path + document.doc_file.url)
         
-        output_format = None
         if document.extension in ['doc', 'docx', 'ppt', 'pptx']: # better view support in pdf format
             output_format = 'pdf'
         else:

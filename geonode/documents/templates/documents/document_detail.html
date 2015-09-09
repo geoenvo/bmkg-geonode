@@ -40,7 +40,7 @@
       </div>
       {% elif resource.doc_file %}
       <!-- #^^ start -->
-      {% if resource.extension|lower in viewtypes %}
+      {% if resource.extension|lower in viewtypes and viewdoc %}
       <iframe src="{% url "document_view" resource.id %}" style="border:0;" width="750" height="400" allowfullscreen webkitallowfullscreen></iframe>
       {% else %}
       <p><a href="{% url "document_download" resource.id %}" target="_blank">Download the {{ resource }} document</a></p>
