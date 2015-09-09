@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>{{ document.title }}</title>
+        <title>{{ document_title }}</title>
         <link rel="stylesheet" href="{{ STATIC_URL }}js/recline/vendor/bootstrap/2.3.2/css/bootstrap.css" />
         
         <!--<link rel="stylesheet" href="{{ STATIC_URL }}css/recline/css/grid.css" />-->
@@ -41,7 +41,7 @@
             
             var dataset = new recline.Model.Dataset({
                 //records: data
-                url: 'http://{{ request.get_host }}{{ document.doc_file.url }}',
+                url: 'http://{{ request.get_host }}{{ document_url }}',
                 // backend: 'dataproxy', // supports csv and xls, website must be public accessible
                 backend: 'csv', // csv only
                 // delimiter: ',',
@@ -64,7 +64,7 @@
         </script>
     </head>
     <body>
-    <div id="grid" style="min-height:300px;"></div>
-    <!--<a href="{{ document.doc_file.url }}">View</a>-->
+    <div id="grid" style="min-height:400px;"></div>
+    <!--<a href="{{ document_url }}">View</a>-->
     </body>
 </html>

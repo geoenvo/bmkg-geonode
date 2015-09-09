@@ -1,5 +1,7 @@
 import os #^^
 import subprocess #^^
+import csv #^^
+from dbfpy import dbf #^^
 
 import json
 from guardian.shortcuts import get_perms
@@ -99,7 +101,7 @@ def document_detail(request, docid):
             'resource': document,
             'metadata': metadata,
             'imgtypes': IMGTYPES,
-            'viewtypes': ['csv', 'xls', 'odt', 'odp', 'ods', 'pdf', 'doc', 'docx', 'ppt', 'pptx', 'xlsx'], #^^
+            'viewtypes': ['csv', 'xls', 'odt', 'odp', 'ods', 'pdf', 'doc', 'docx', 'ppt', 'pptx', 'xlsx', 'dbf'], #^^
             'related': related}
 
         if settings.SOCIAL_ORIGINS:
@@ -143,40 +145,74 @@ def document_view(request, docid):
                 )
             ), status=401
         )
-    if document.extension in ['csv']: # for recline.js supported files
+    
+    viewerjs_path = '/static/js/viewerjs/#../../..'
+    input_file_path = settings.PROJECT_ROOT + document.doc_file.url
+    output_dir = 'tmpdoc/'
+    output_path = settings.MEDIA_ROOT + '/' + output_dir
+    
+    if document.extension in ['csv', 'dbf']: # csv format supported by recline.js
+        document_title = document.title
+        document_url = document.doc_file.url
+        
+        if document.extension == 'dbf': # convert dbf to csv first
+            output_format = 'csv'
+            output_file = os.path.basename(os.path.splitext(input_file_path)[0]) + '.' + output_format
+            output_file_path = output_path + output_file
+            
+            with open(output_file_path, 'wb') as csv_file:
+                in_db = dbf.Dbf(input_file_path)
+                out_csv = csv.writer(csv_file)
+                column_header = []
+                
+                for field in in_db.header.fields:
+                    column_header.append(field.name)
+                
+                out_csv.writerow(column_header)
+                
+                for rec in in_db:
+                    out_csv.writerow(rec.fieldData)
+                
+                in_db.close()
+                document_url = settings.MEDIA_URL + output_dir + output_file
+        
         return render_to_response(
             "documents/document_view_recline.html",
             RequestContext(
                 request,
                 {
-                    'document': document,
+                    'document_title': document_title,
+                    'document_url': document_url,
                 }
             )
         )
-    elif document.extension in ['doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx']: # convert first with unoconv
+    elif document.extension in ['doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx']: # files convertable with unoconv
         MAX_CONVERT_MB = settings.MAX_DOCUMENT_SIZE
-        input_file_path = settings.PROJECT_ROOT + document.doc_file.url
+        
+        # don't convert if doc file is too big, send straight to download
         if (os.path.getsize(input_file_path) / 1024 / 1024) > MAX_CONVERT_MB:
-            return HttpResponseRedirect('/static/js/viewerjs/#../../..' + document.doc_file.url)
+            return HttpResponseRedirect(document.doc_file.url)
+            #return HttpResponseRedirect(viewerjs_path + document.doc_file.url)
+        
         output_format = None
-        if document.extension in ['doc', 'docx', 'ppt', 'pptx']:
+        if document.extension in ['doc', 'docx', 'ppt', 'pptx']: # better view support in pdf format
             output_format = 'pdf'
         else:
-            output_format = 'ods'
-        output_dir = 'tmpdoc/'
-        output_path = settings.MEDIA_ROOT + '/' + output_dir
+            output_format = 'ods' # better view support for spreadsheets in ods format
+        
         output_file = os.path.basename(os.path.splitext(input_file_path)[0]) + '.' + output_format
         output_file_path = output_path + output_file
+        
         try:
             subprocess.check_call(['unoconv', '--format', output_format, '--output', output_file_path, input_file_path])
             if os.path.exists(output_file_path):
-                return HttpResponseRedirect('/static/js/viewerjs/#../../..' + settings.MEDIA_URL + output_dir + output_file)
+                return HttpResponseRedirect(viewerjs_path + settings.MEDIA_URL + output_dir + output_file)
             else:
                 return HttpResponse('File preview error, please try again.', status=500)
         except subprocess.CalledProcessError as e:
             return HttpResponse('File conversion error: %s' % e, status=500)
     elif document.extension in ['odt', 'odp', 'ods', 'pdf']: # for viewer.js supported files
-        return HttpResponseRedirect('/static/js/viewerjs/#../../..' + document.doc_file.url)
+        return HttpResponseRedirect(viewerjs_path + document.doc_file.url)
     else:
         # just load the file
         return HttpResponseRedirect(document.doc_file.url)
