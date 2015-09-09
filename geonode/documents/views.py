@@ -158,17 +158,18 @@ def document_view(request, docid):
     output_dir = 'tmpdoc/'
     output_path = settings.MEDIA_ROOT + '/' + output_dir
     output_format = None
+    document_extension = document.extension.lower()
     
     # don't convert if doc file is too big, send straight to download
     MAX_CONVERT_MB = settings.MAX_DOCUMENT_SIZE
     if (os.path.getsize(input_file_path) / 1024 / 1024) > MAX_CONVERT_MB:
         return HttpResponseRedirect(document.doc_file.url)
     
-    if document.extension in ['csv', 'dbf']: # csv format supported by recline.js
+    if document_extension in ['csv', 'dbf']: # csv format supported by recline.js
         document_title = document.title
         document_url = document.doc_file.url
         
-        if document.extension == 'dbf': # convert dbf to csv first
+        if document_extension == 'dbf': # convert dbf to csv first
             output_format = 'csv'
             output_file = os.path.basename(os.path.splitext(input_file_path)[0]) + '.' + output_format
             output_file_path = output_path + output_file
@@ -199,14 +200,8 @@ def document_view(request, docid):
                 }
             )
         )
-    elif document.extension in ['doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx']: # files convertable with unoconv
-        # don't convert if doc file is too big, send straight to download
-        #MAX_CONVERT_MB = settings.MAX_DOCUMENT_SIZE
-        #if (os.path.getsize(input_file_path) / 1024 / 1024) > MAX_CONVERT_MB:
-        #    return HttpResponseRedirect(document.doc_file.url)
-        #    #return HttpResponseRedirect(viewerjs_path + document.doc_file.url)
-        
-        if document.extension in ['doc', 'docx', 'ppt', 'pptx']: # better view support in pdf format
+    elif document_extension in ['doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx']: # files convertable with unoconv
+        if document_extension in ['doc', 'docx', 'ppt', 'pptx']: # better view support in pdf format
             output_format = 'pdf'
         else:
             output_format = 'ods' # better view support for spreadsheets in ods format
