@@ -2,26 +2,41 @@
 <html>
     <head>
         <title>{{ document_title }}</title>
-        <link rel="stylesheet" href="{{ STATIC_URL }}js/recline/vendor/bootstrap/2.3.2/css/bootstrap.css" />
+        <link rel="stylesheet" href="{{ STATIC_URL }}js/recline/vendor/bootstrap/3.2.0/css/bootstrap.css">
         
-        <!--<link rel="stylesheet" href="{{ STATIC_URL }}css/recline/css/grid.css" />-->
-        <link rel="stylesheet" href="{{ STATIC_URL }}css/recline/css/slickgrid.css" />
-        <link rel="stylesheet" href="{{ STATIC_URL }}js/recline/vendor/slickgrid/2.0.1/slick.grid.css" />
+        <link rel="stylesheet" href="{{ STATIC_URL }}js/recline/vendor/leaflet/0.7.3/leaflet.css">
+        <link rel="stylesheet" href="{{ STATIC_URL }}js/recline/vendor/leaflet.markercluster/MarkerCluster.css">
+        <link rel="stylesheet" href="{{ STATIC_URL }}js/recline/vendor/leaflet.markercluster/MarkerCluster.Default.css">
+        
+        <link rel="stylesheet" href="{{ STATIC_URL }}js/recline/vendor/slickgrid/2.2/slick.grid.css">
+        
+        <link rel="stylesheet" href="{{ STATIC_URL }}css/recline/css/map.css">
+        <link rel="stylesheet" href="{{ STATIC_URL }}css/recline/css/multiview.css">
+        <link rel="stylesheet" href="{{ STATIC_URL }}css/recline/css/slickgrid.css">
+        <link rel="stylesheet" href="{{ STATIC_URL }}css/recline/css/flot.css">
         
         <script type="text/javascript" src="{{ STATIC_URL }}js/recline/vendor/jquery/1.7.1/jquery.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}js/recline/vendor/underscore/1.4.4/underscore.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}js/recline/vendor/backbone/1.0.0/backbone.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}js/recline/vendor/mustache/0.5.0-dev/mustache.js"></script>
-        <script type="text/javascript" src="{{ STATIC_URL }}js/recline/vendor/bootstrap/2.3.2/bootstrap.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}js/recline/vendor/bootstrap/3.2.0/js/bootstrap.js"></script>
         
-        <script type="text/javascript" src="{{ STATIC_URL }}js/recline/vendor/slickgrid/2.0.1/jquery-ui-1.8.16.custom.min.js"></script>
-        <script type="text/javascript" src="{{ STATIC_URL }}js/recline/vendor/slickgrid/2.0.1/jquery.event.drag-2.2.js"></script>
-        <!--<script type="text/javascript" src="{{ STATIC_URL }}js/recline/vendor/slickgrid/2.0.1/jquery.event.drag-2.0.min.js"></script>-->
-        <!--<script type="text/javascript" src="{{ STATIC_URL }}js/recline/vendor/slickgrid/2.0.1/slick.core.js"></script>-->
-        <!--<script type="text/javascript" src="{{ STATIC_URL }}js/recline/vendor/slickgrid/2.0.1/slick.grid.js"></script>-->
-        <script type="text/javascript" src="{{ STATIC_URL }}js/recline/vendor/slickgrid/2.0.1/slick.grid.min.js"></script>
-        <script type="text/javascript" src="{{ STATIC_URL }}js/recline/vendor/slickgrid/2.0.1/plugins/slick.rowselectionmodel.js"></script>
-        <script type="text/javascript" src="{{ STATIC_URL }}js/recline/vendor/slickgrid/2.0.1/plugins/slick.rowmovemanager.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}js/recline/vendor/leaflet/0.7.3/leaflet.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}js/recline/vendor/leaflet.markercluster/leaflet.markercluster.js"></script>
+        
+        <script type="text/javascript" src="{{ STATIC_URL }}js/recline/vendor/flot/jquery.flot.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}js/recline/vendor/flot/jquery.flot.time.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}js/recline/vendor/moment/2.0.0/moment.js"></script>
+        
+        <script type="text/javascript" src="{{ STATIC_URL }}js/recline/vendor/slickgrid/2.2/jquery-ui-1.8.16.custom.min.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}js/recline/vendor/slickgrid/2.2/jquery.event.drag-2.2.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}js/recline/vendor/slickgrid/2.2/jquery.event.drop-2.2.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}js/recline/vendor/slickgrid/2.2/slick.core.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}js/recline/vendor/slickgrid/2.2/slick.formatters.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}js/recline/vendor/slickgrid/2.2/slick.editors.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}js/recline/vendor/slickgrid/2.2/slick.grid.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}js/recline/vendor/slickgrid/2.2/plugins/slick.rowselectionmodel.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}js/recline/vendor/slickgrid/2.2/plugins/slick.rowmovemanager.js"></script>
         
         <script type="text/javascript" src="{{ STATIC_URL }}js/recline/dist/csv.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}js/recline/dist/recline.js"></script>
@@ -49,10 +64,11 @@
                 // encoding: 'utf8'
             });
             
-            dataset.fetch();
-            
             var $el = $('#grid');
             
+            //dataset.fetch();
+            
+            /*
             var grid = new recline.View.SlickGrid({
               model: dataset,
               el: $el
@@ -60,11 +76,59 @@
             
             grid.visible = true;
             grid.render();
+            */
+            
+            dataset.fetch().done(function(dataset) {
+                //console.log(dataset.recordCount);
+               
+                var views = [
+                    {
+                        id: 'slickgrid',
+                        label: 'Grid',
+                        view: new recline.View.SlickGrid({
+                            model: dataset,
+                            state: {
+                                gridOptions: {
+                                    editable: true,
+                                    enabledAddRow: false,
+                                    enabledDelRow: false,
+                                    enableReOrderRow: true,
+                                    autoEdit: false,
+                                    enableCellNavigation: true
+                                }
+                            }
+                        })
+                    },
+                    {
+                        id: 'graph',
+                        label: 'Graph',
+                        view: new recline.View.Graph({
+                            model: dataset
+                        })
+                    },
+                    {
+                        id: 'map',
+                        label: 'Map',
+                        view: new recline.View.Map({
+                          model: dataset
+                        })
+                    }
+                ];
+            
+                var multiView = new recline.View.MultiView({
+                    model: dataset,
+                    el: $el,
+                    views: views
+                });
+            });
         });
         </script>
+        <style type="text/css">
+        .recline-slickgrid { height: 600px; }
+        </style>
     </head>
     <body>
-    <div id="grid" style="min-height:400px;"></div>
+    <div id="grid"></div>
     <!--<a href="{{ document_url }}">View</a>-->
     </body>
 </html>
