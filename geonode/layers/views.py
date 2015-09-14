@@ -747,6 +747,12 @@ def layer_replace(request, layername, template='layers/layer_replace.html'):
                     out['success'] = False
                     out['errors'] = _("You are attempting to replace a raster layer with a vector.")
                 else:
+                    try: #^^
+                        main = Main.objects.get(layer=layer) #^^
+                        main_id = main.id #^^
+                    except: #^^
+                        main = None #^^
+                    
                     # delete geoserver's store before upload
                     cat = gs_catalog
                     cascading_delete(cat, layer.typename)
@@ -756,7 +762,9 @@ def layer_replace(request, layername, template='layers/layer_replace.html'):
                         user=request.user,
                         overwrite=True,
                         charset=form.cleaned_data["charset"],
+                        main_id=main_id, #^^
                     )
+                    print 'debug file_upload success'
                     out['success'] = True
                     out['url'] = reverse(
                         'layer_detail', args=[

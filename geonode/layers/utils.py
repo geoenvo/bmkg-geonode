@@ -614,7 +614,7 @@ def file_upload(filename, name=None, user=None, title=None, abstract=None,
             layer.keywords.add(*keywords)
 
     #^^ start saving metadata point of contact, layer needs to exist first
-    if (metadata['poc'].isdigit()):
+    if form_metadata != None and metadata['poc'].isdigit():
         try:
             contact = get_user_model().objects.get(id=metadata['poc'])
             layer.poc = contact
@@ -624,7 +624,7 @@ def file_upload(filename, name=None, user=None, title=None, abstract=None,
     #^^ end
     
     #^^ start saving metadata author, layer needs to exist first
-    if (metadata['metadata_author'].isdigit()):
+    if form_metadata != None and metadata['metadata_author'].isdigit():
         try:
             author = get_user_model().objects.get(id=metadata['metadata_author'])
             layer.metadata_author = author

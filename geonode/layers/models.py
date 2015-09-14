@@ -264,36 +264,37 @@ class UploadSession(models.Model):
 class LayerFile(models.Model):
 
     def get_upload_path(instance, filename): #^^
-        main = Main.objects.get(pk=instance.main_id) #^^
-        
         #^^ default upload path (replaced with custom upload path)
         upload_path = 'uploaded/layers/%s' % filename #^^
         
-        #^^ construct regions directory from
-        #^^ region names in alphabetic order,
-        #^^ replace whitespace with underscore,
-        #^^ in lower case and separated by dash
-        regions = [] #^^
-        regions_id = main.regions.split(',') #^^
-        for region_id in regions_id: #^^
-            try: #^^
-                region = Region.objects.get(id=region_id) #^^
-                regions.append(region.name) #^^
-            except: #^^
-                pass #^^
-        regions.sort() #^^
-        regions_dirname = '-'.join([region.replace(' ', '_').lower() for region in regions]) #^^
-        
-        # custom icraf_dr upload path
-        upload_path = '{cat_alp}/{cov_alp}/{src_alp}/{year_num}/layers/{filename}'.format( #^^
-            #cat_alp=main.category.cat_alp, #^^ replaced by TopicCategory identifier
-            cat_alp=main.topic_category.identifier, #^^
-            #cov_alp=main.coverage.cov_alp, #^^ replaced by regions_dirname
-            cov_alp=regions_dirname, #^^
-            src_alp=main.source.src_alp, #^^
-            year_num=str(main.year.year_num), #^^
-            filename=filename #^^
-        )
+        if instance.main_id != None:
+            main = Main.objects.get(pk=instance.main_id) #^^
+            
+            #^^ construct regions directory from
+            #^^ region names in alphabetic order,
+            #^^ replace whitespace with underscore,
+            #^^ in lower case and separated by dash
+            regions = [] #^^
+            regions_id = main.regions.split(',') #^^
+            for region_id in regions_id: #^^
+                try: #^^
+                    region = Region.objects.get(id=region_id) #^^
+                    regions.append(region.name) #^^
+                except: #^^
+                    pass #^^
+            regions.sort() #^^
+            regions_dirname = '-'.join([region.replace(' ', '_').lower() for region in regions]) #^^
+            
+            # custom icraf_dr upload path
+            upload_path = '{cat_alp}/{cov_alp}/{src_alp}/{year_num}/layers/{filename}'.format( #^^
+                #cat_alp=main.category.cat_alp, #^^ replaced by TopicCategory identifier
+                cat_alp=main.topic_category.identifier, #^^
+                #cov_alp=main.coverage.cov_alp, #^^ replaced by regions_dirname
+                cov_alp=regions_dirname, #^^
+                src_alp=main.source.src_alp, #^^
+                year_num=str(main.year.year_num), #^^
+                filename=filename #^^
+            )
         
         return upload_path
     

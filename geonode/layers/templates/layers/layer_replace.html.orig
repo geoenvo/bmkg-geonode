@@ -101,7 +101,7 @@
 {% endblock %}
 
 {% block extra_script %}
-<script src="{{ STATIC_URL }}js/custom_layer_replace.js"></script>
+
 <script data-main="{% static 'geonode/js/upload/main' %}"
   src="{% static 'lib/js/require.js' %}">
 </script>
