@@ -28,6 +28,13 @@ from geonode.documents.forms import DocumentForm, DocumentCreateForm, DocumentRe
 from geonode.documents.models import IMGTYPES
 from geonode.utils import build_social_links
 
+from icraf_dr.models import Category, Coverage, Source, Year, Main #^^
+from dateutil.parser import * #^^
+from django.core.validators import URLValidator #^^
+from django.contrib.auth import get_user_model #^^
+from geonode.base.models import SpatialRepresentationType, RestrictionCodeType, License #^^
+from django.core.exceptions import ValidationError #^^
+
 ALLOWED_DOC_TYPES = settings.ALLOWED_DOCUMENT_TYPES
 
 _PERMISSION_MSG_DELETE = _("You are not permitted to delete this document")
@@ -229,14 +236,90 @@ class DocumentUploadView(CreateView):
     form_class = DocumentCreateForm
 
     def get_context_data(self, **kwargs):
+        print 'debug document upload' #^^
         context = super(DocumentUploadView, self).get_context_data(**kwargs)
         context['ALLOWED_DOC_TYPES'] = ALLOWED_DOC_TYPES
+        
+        icraf_dr_categories = Category.objects.order_by('cat_num') #^^
+        icraf_dr_coverages = Coverage.objects.order_by('cov_num') #^^
+        icraf_dr_sources = Source.objects.order_by('src_num') #^^
+        icraf_dr_years = Year.objects.order_by('year_num') #^^
+        
+        document_form = DocumentForm(prefix="resource") #^^
+        category_form = CategoryForm(prefix="category_choice_field") #^^
+        
+        context['icraf_dr_categories'] = icraf_dr_categories #^^
+        context['icraf_dr_coverages'] = icraf_dr_coverages #^^
+        context['icraf_dr_sources'] = icraf_dr_sources #^^
+        context['icraf_dr_years'] = icraf_dr_years #^^
+        context['document_form'] = document_form #^^
+        context['category_form'] = category_form #^^
+        
         return context
 
     def form_valid(self, form):
         """
         If the form is valid, save the associated model.
         """
+        print 'debug document form valid' #^^
+        
+        icraf_dr_category =Category.objects.get(pk=self.request.POST['icraf_dr_category']) #^^
+        icraf_dr_coverage =Coverage.objects.get(pk=self.request.POST['icraf_dr_coverage']) #^^
+        icraf_dr_source =Source.objects.get(pk=self.request.POST['icraf_dr_source']) #^^
+        icraf_dr_year =Year.objects.get(pk=self.request.POST['icraf_dr_year']) #^^
+        icraf_dr_date_created = self.request.POST.get('icraf_dr_date_created', None) #^^
+        icraf_dr_date_published = self.request.POST.get('icraf_dr_date_published', None) #^^
+        icraf_dr_date_revised = self.request.POST.get('icraf_dr_date_revised', None) #^^
+        
+        #^^ validate date format
+        if icraf_dr_date_created: #^^
+            try: #^^
+                parse(icraf_dr_date_created) #^^
+            except ValueError: #^^
+                icraf_dr_date_created = None #^^
+        else: #^^
+            icraf_dr_date_created = None #^^
+        
+        if icraf_dr_date_published: #^^
+            try: #^^
+                parse(icraf_dr_date_published) #^^
+            except ValueError: #^^
+                icraf_dr_date_published = None #^^
+        else: #^^
+            icraf_dr_date_published = None #^^
+        
+        if icraf_dr_date_revised: #^^
+            try: #^^
+                parse(icraf_dr_date_revised) #^^
+            except ValueError: #^^
+                icraf_dr_date_revised = None #^^
+        else: #^^
+            icraf_dr_date_revised = None #^^
+        
+        try: #^^
+            main_topic_category = TopicCategory(id=self.request.POST['category_choice_field']) #^^
+        except: #^^
+            main_topic_category = None #^^
+        
+        main_regions = ','.join(self.request.POST.getlist('resource-regions')) #^^ save as comma separated ids
+        
+        main = Main( #^^
+            category=icraf_dr_category, #^^
+            coverage=icraf_dr_coverage, #^^
+            source=icraf_dr_source, #^^
+            year=icraf_dr_year, #^^
+            basename=form.cleaned_data['doc_file'].name, #^^
+            topic_category = main_topic_category, #^^
+            regions = main_regions, #^^
+            date_created=icraf_dr_date_created, #^^
+            date_published=icraf_dr_date_published, #^^
+            date_revised=icraf_dr_date_revised #^^
+        ) #^^
+        
+        #^^ save icraf_dr_main and pass id to document model object
+        main.save() #^^
+        main_id = main.id #^^
+        
         self.object = form.save(commit=False)
         self.object.owner = self.request.user
         resource_id = self.request.POST.get('resource', None)
@@ -249,8 +332,17 @@ class DocumentUploadView(CreateView):
         if settings.RESOURCE_PUBLISHING:
             is_published = False
         self.object.is_published = is_published
-
-        self.object.save()
+        
+        self.object.main_id = main_id #^^
+        
+        try: #^^
+            self.object.save() #^^
+            main.document = self.object #^^
+            main.save() #^^
+        except: #^^
+            main.delete() #^^
+        
+        #^^ self.object.save()
         self.object.set_permissions(form.cleaned_data['permissions'])
 
         abstract = None
@@ -258,6 +350,164 @@ class DocumentUploadView(CreateView):
         regions = []
         keywords = []
         bbox = None
+        
+        #^^ start processing metadata fields
+        owner = self.request.POST.get('resource-owner', None) #^^
+        #title = self.request.POST['resource-title'] #^^ replaced by title
+        #date = self.request.POST.get('resource-date'], None) #^^ replaced by icraf_dr_date_created
+        date = icraf_dr_date_created #^^
+        date_type = self.request.POST.get('resource-date_type', None) #^^
+        #edition = self.request.POST['resource-edition'] #^^ replaced by icraf_dr_year
+        edition = str(icraf_dr_year.year_num) #^^
+        abstract = self.request.POST.get('resource-abstract', None) #^^
+        purpose = self.request.POST.get('resource-purpose', None) #^^
+        maintenance_frequency = self.request.POST.get('resource-maintenance_frequency', None) #^^
+        regions = self.request.POST.getlist('resource-regions', None) #^^
+        restriction_code_type = self.request.POST.get('resource-restriction_code_type', None) #^^
+        constraints_other = self.request.POST.get('resource-constraints_other', None) #^^
+        license = self.request.POST.get('resource-license', None) #^^
+        language = self.request.POST.get('resource-language', None) #^^
+        spatial_representation_type = self.request.POST.get('resource-spatial_representation_type', None) #^^
+        temporal_extent_start = self.request.POST.get('resource-temporal_extent_start', None) #^^
+        temporal_extent_end = self.request.POST.get('resource-temporal_extent_end', None) #^^
+        supplemental_information = self.request.POST.get('resource-supplemental_information', None) #^^
+        distribution_url = self.request.POST.get('resource-distribution_url', None) #^^
+        distribution_description = self.request.POST.get('resource-distribution_description', None) #^^
+        data_quality_statement = self.request.POST.get('resource-data_quality_statement', None) #^^
+        featured = self.request.POST.get('resource-featured', False) #^^
+        is_published = self.request.POST.get('resource-is_published', False) #^^
+        thumbnail_url = self.request.POST.get('resource-thumbnail_url', None) #^^
+        keywords = self.request.POST.get('resource-keywords', None) #^^
+        poc = self.request.POST.get('resource-poc', None) #^^
+        metadata_author = self.request.POST.get('resource-metadata_author', None) #^^
+        category_choice_field = self.request.POST.get('category_choice_field', None) #^^
+        doc_type = self.request.POST.get('doc_type', None) #^^
+        
+        if owner and owner.isdigit():
+            try:
+                owner = get_user_model().objects.get(id=owner)
+                self.object.owner = owner
+            except get_user_model().DoesNotExist:
+                pass
+        
+        if date:
+            self.object.date = date
+        
+        if date_type:
+            self.object.date_type = date_type
+        
+        if edition:
+            self.object.edition = edition
+        
+        if abstract:
+            self.object.abstract = abstract
+        
+        if purpose:
+            self.object.purpose = purpose
+        
+        if maintenance_frequency:
+            self.object.maintenance_frequency = maintenance_frequency
+        
+        if restriction_code_type:
+            try:
+                self.object.restriction_code_type = RestrictionCodeType(id=restriction_code_type)
+            except:
+                pass
+        
+        if constraints_other:
+            self.object.constraints_other = constraints_other
+        
+        if license:
+            try:
+                self.object.license = License(id=license)
+            except:
+                pass
+        
+        if language:
+            self.object.language = language
+        
+        if spatial_representation_type:
+            try:
+                self.object.spatial_representation_type = SpatialRepresentationType(id=spatial_representation_type)
+            except:
+                pass
+        
+        if temporal_extent_start:
+            try:
+                parse(temporal_extent_start)
+                self.object.temporal_extent_start = temporal_extent_start
+            except ValueError:
+                pass
+        
+        if temporal_extent_end:
+            try:
+                parse(temporal_extent_end)
+                self.object.temporal_extent_end = temporal_extent_end
+            except ValueError:
+                pass
+        
+        if supplemental_information:
+            self.object.supplemental_information = supplemental_information
+        
+        if distribution_url:
+            self.object.distribution_url = distribution_url
+        
+        if distribution_description:
+            self.object.distribution_description = distribution_description
+        
+        if data_quality_statement:
+            self.object.data_quality_statement = data_quality_statement
+        
+        if featured != False:
+            self.object.featured = True
+        
+        if is_published != False:
+            self.object.is_published = True
+        
+        if thumbnail_url:
+            val = URLValidator()
+            try:
+                val(thumbnail_url)
+                if (thumbnail_url.lower().startswith(('http://', 'https://')) and thumbnail_url.lower().endswith(('.jpg', '.jpeg', '.png'))):
+                    self.object.thumbnail_url = thumbnail_url
+            except ValidationError:
+                pass
+        
+        if len(keywords) > 0:
+            keywords = [keyword.strip() for keyword in keywords.split(',')]
+            self.object.keywords.add(*keywords)
+        
+        if len(regions) > 0:
+            self.object.regions.add(*regions)
+        
+        if poc and poc.isdigit():
+            try:
+                contact = get_user_model().objects.get(id=poc)
+                self.object.poc = contact
+            except get_user_model().DoesNotExist:
+                pass
+        
+        if metadata_author and metadata_author.isdigit():
+            try:
+                author = get_user_model().objects.get(id=metadata_author)
+                self.object.metadata_author = author
+            except get_user_model().DoesNotExist:
+                pass
+        
+        if category_choice_field:
+            try:
+                self.object.category = TopicCategory(id=category_choice_field)
+            except:
+                pass
+        
+        self.object.save()
+        
+        if doc_type:
+            try:
+                Document.objects.filter(id=self.object.pk).update(doc_type=doc_type)
+            except:
+                pass
+        #^^ end
 
         if getattr(settings, 'EXIF_ENABLED', False):
             try:
@@ -281,6 +531,7 @@ class DocumentUploadView(CreateView):
             except:
                 print "NLP extraction failed."
 
+        """ #^^ overriden above in metadata saving
         if abstract:
             self.object.abstract = abstract
             self.object.save()
@@ -295,6 +546,7 @@ class DocumentUploadView(CreateView):
 
         if len(keywords) > 0:
             self.object.keywords.add(*keywords)
+        """
 
         if bbox:
             bbox_x0, bbox_x1, bbox_y0, bbox_y1 = bbox

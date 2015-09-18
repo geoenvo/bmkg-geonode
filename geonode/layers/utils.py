@@ -480,7 +480,12 @@ def file_upload(filename, name=None, user=None, title=None, abstract=None,
             pass
         
         defaults['constraints_other'] = metadata['constraints_other']
-        defaults['license'] = License(id=metadata['license'])
+        
+        try:
+            defaults['license'] = License(id=metadata['license'])
+        except:
+            pass
+        
         defaults['language'] = metadata['language']
         
         try:

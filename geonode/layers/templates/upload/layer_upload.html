@@ -324,9 +324,8 @@
                   {% autoescape off %}
                   {% for choice in category_form.category_choice_field.field.choices %}
                   <div class="radio">
-                    <input type="radio" name="category_choice_field" value="{{ choice.0 }}"
+                    <input type="radio" name="category_choice_field" value="{{ choice.0 }}">
                       {{ choice.1 }}
-                    </input>
                   </div>
                   {% endfor %}
                   {% endautoescape %}
