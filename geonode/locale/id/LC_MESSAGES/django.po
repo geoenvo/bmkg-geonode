@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GeoNode\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-14 03:05-0500\n"
+"POT-Creation-Date: 2015-09-19 11:20-0500\n"
 "PO-Revision-Date: 2015-07-16 10:36+0000\n"
 "Last-Translator: Julien Collaer <julien.collaer@opengeode.be>\n"
 "Language-Team: Indonesian (http://www.transifex.com/p/geonode/language/id/)\n"
@@ -153,7 +153,10 @@ msgid "No information provided"
 msgstr "Tidak tersedia informasi"
 
 #: base/forms.py:43 base/templates/base/resourcebase_info_panel.html:63
-#: documents/templates/documents/document_metadata.html:58
+#: documents/templates/documents/document_metadata.html:69
+#: documents/templates/documents/document_metadata.html:288
+#: documents/templates/documents/document_upload.html:88
+#: documents/templates/documents/document_upload.html:298
 #: layers/templates/layers/layer_metadata.html:61
 #: layers/templates/layers/layer_metadata.html:235
 #: layers/templates/upload/layer_upload.html:115
@@ -442,7 +445,7 @@ msgstr "Wali data, Point of Contact, Metadata Penulis"
 
 #: base/templates/base/_resourcebase_contact_snippet.html:14
 #: base/templates/base/resourcebase_info_panel.html:90
-#: documents/templates/documents/document_metadata.html:48
+#: documents/templates/documents/document_metadata.html:276
 #: layers/templates/layers/layer_metadata.html:271
 #: maps/templates/maps/map_metadata.html:51
 msgid "Point of Contact"
@@ -481,6 +484,8 @@ msgid "Date"
 msgstr "Tanggal"
 
 #: base/templates/base/resourcebase_info_panel.html:46
+#: documents/templates/documents/document_metadata.html:51
+#: documents/templates/documents/document_upload.html:44
 #: layers/templates/layers/layer_detail.html:213
 msgid "Type"
 msgstr "Tipe"
@@ -718,6 +723,7 @@ msgid "See users"
 msgstr "Lihat para pengguna"
 
 #: documents/forms.py:92 documents/forms.py:160
+#: documents/templates/documents/document_upload.html:33
 msgid "Document must be a file or url."
 msgstr "Dokumen harus file atau url."
 
@@ -737,43 +743,43 @@ msgstr "Tautan ke"
 msgid "Permissions must be valid JSON."
 msgstr "Perizinan harus JSON valid."
 
-#: documents/models.py:41
+#: documents/models.py:84
 msgid "File"
 msgstr "Berkas"
 
-#: documents/models.py:50
+#: documents/models.py:93
 msgid "The URL of the document if it is external."
 msgstr "URL dari dokumen jika eksternal."
 
-#: documents/models.py:51
+#: documents/models.py:94
 msgid "URL"
 msgstr "URL"
 
-#: documents/views.py:33
+#: documents/views.py:40
 msgid "You are not permitted to delete this document"
 msgstr "Anda tidak diizinkan untuk menghapus dokumen ini"
 
-#: documents/views.py:34
+#: documents/views.py:41
 msgid "You do not have permissions for this document."
 msgstr "Anda tidak memiliki izin untuk dokumen ini"
 
-#: documents/views.py:35
+#: documents/views.py:42
 msgid "You are not permitted to modify this document"
 msgstr "Anda tidak diizinkan untuk memodifikasi dokumen ini"
 
-#: documents/views.py:37
+#: documents/views.py:44
 msgid "You are not permitted to modify this document's metadata"
 msgstr "Anda tidak diizinkan untuk memodifikasi metadata dokumen ini"
 
-#: documents/views.py:38
+#: documents/views.py:45
 msgid "You are not permitted to view this document"
 msgstr "Anda tidak diizinkan untuk melihat dokumen ini"
 
-#: documents/views.py:74 documents/views.py:140 documents/views.py:151
+#: documents/views.py:81 documents/views.py:147 documents/views.py:158
 msgid "You are not allowed to view this document."
 msgstr "Anda tidak diijinkan untuk melihat dokumen ini"
 
-#: documents/views.py:373
+#: documents/views.py:654
 msgid "You are not allowed to edit this document."
 msgstr "Anda tidak diizinkan untuk mengedit dokumen ini."
 
@@ -917,7 +923,6 @@ msgid "This document is not related to any maps or layers"
 msgstr "Dokumen ini tidak berhubungan dengan peta atau layer"
 
 #: documents/templates/documents/document_detail.html:193
-#: documents/templates/documents/document_upload.html:31
 #: groups/templates/groups/group_detail.html:70
 #: layers/templates/layers/layer_detail.html:202
 #: layers/templates/layers/layer_replace.html:94
@@ -935,7 +940,7 @@ msgstr "Ubah Kepemilikan Dokumen"
 
 #: documents/templates/documents/document_list.html:6
 #: documents/templates/documents/document_list.html:13
-#: documents/templates/documents/document_metadata.html:16
+#: documents/templates/documents/document_metadata.html:17
 #: documents/templates/documents/document_upload_base.html:11
 msgid "Explore Documents"
 msgstr "Telusuri Dokumen"
@@ -945,24 +950,31 @@ msgstr "Telusuri Dokumen"
 msgid "Upload Documents"
 msgstr "Unggah Dokumen"
 
-#: documents/templates/documents/document_metadata.html:17
+#: documents/templates/documents/document_metadata.html:18
 #: layers/templates/layers/layer_metadata.html:13
 #: maps/templates/maps/map_metadata.html:12
 msgid "Edit Metadata"
 msgstr "Ubah metadata"
 
-#: documents/templates/documents/document_metadata.html:22
+#: documents/templates/documents/document_metadata.html:23
 msgid "Editing details for"
 msgstr "Mengubah detil untuk"
 
-#: documents/templates/documents/document_metadata.html:26
+#: documents/templates/documents/document_metadata.html:27
 #: layers/templates/layers/layer_metadata.html:30
 #: maps/templates/maps/map_metadata.html:29
 msgid "Error updating metadata.  Please check the following fields: "
 msgstr "Kesalahan pembaharuan metadata. Silakan cek field berikut:"
 
-#: documents/templates/documents/document_metadata.html:41
-#: documents/templates/documents/document_metadata.html:76
+#: documents/templates/documents/document_metadata.html:42
+#: documents/templates/documents/document_upload.html:140
+#: layers/templates/layers/layer_metadata.html:51
+#: layers/templates/upload/layer_upload.html:167
+msgid "Please complete the required fields below."
+msgstr "Mohon lengkapi field yang diperlukan di bawah ini."
+
+#: documents/templates/documents/document_metadata.html:45
+#: documents/templates/documents/document_metadata.html:306
 #: groups/templates/groups/group_update.html:26
 #: layers/templates/layers/layer_metadata.html:54
 #: layers/templates/layers/layer_metadata.html:282
@@ -971,7 +983,54 @@ msgstr "Kesalahan pembaharuan metadata. Silakan cek field berikut:"
 msgid "Update"
 msgstr "Ubah"
 
-#: documents/templates/documents/document_metadata.html:53
+#: documents/templates/documents/document_metadata.html:78
+#: documents/templates/documents/document_upload.html:96
+#: layers/templates/layers/layer_metadata.html:69
+#: layers/templates/upload/layer_upload.html:123
+msgid "Coverage"
+msgstr "Cakupan"
+
+#: documents/templates/documents/document_metadata.html:104
+#: documents/templates/documents/document_upload.html:159
+#: layers/templates/layers/layer_metadata.html:92
+#: layers/templates/upload/layer_upload.html:184
+msgid "Date created"
+msgstr "Tanggal dibuat"
+
+#: documents/templates/documents/document_metadata.html:114
+#: documents/templates/documents/document_upload.html:168
+#: layers/templates/layers/layer_metadata.html:101
+#: layers/templates/upload/layer_upload.html:193
+msgid "Date published"
+msgstr "Tanggal dipublikasi"
+
+#: documents/templates/documents/document_metadata.html:124
+#: documents/templates/documents/document_upload.html:177
+#: layers/templates/layers/layer_metadata.html:110
+#: layers/templates/upload/layer_upload.html:202
+msgid "Date revised"
+msgstr "Tanggal direvisi"
+
+#: documents/templates/documents/document_metadata.html:146
+#: documents/templates/documents/document_upload.html:115
+#: documents/templates/documents/document_upload.html:196
+#: layers/templates/layers/layer_metadata.html:129
+#: layers/templates/upload/layer_upload.html:142
+#: layers/templates/upload/layer_upload.html:221
+msgid "Year"
+msgstr "Tahun"
+
+#: documents/templates/documents/document_metadata.html:154
+#: documents/templates/documents/document_upload.html:105
+#: documents/templates/documents/document_upload.html:204
+#: layers/templates/layers/layer_detail.html:212
+#: layers/templates/layers/layer_metadata.html:137
+#: layers/templates/upload/layer_upload.html:132
+#: layers/templates/upload/layer_upload.html:229
+msgid "Source"
+msgstr "Sumber"
+
+#: documents/templates/documents/document_metadata.html:282
 #: layers/templates/layers/layer_metadata.html:276
 #: maps/templates/maps/map_metadata.html:56
 msgid "Metadata Provider"
@@ -1015,13 +1074,28 @@ msgstr "Ubah"
 
 #: documents/templates/documents/document_replace.html:27
 #: layers/templates/layers/layer_replace.html:84
-#: layers/templates/upload/layer_upload.html:362
+#: layers/templates/upload/layer_upload.html:361
 msgid "Clear"
 msgstr "Bersihkan"
 
-#: documents/templates/documents/document_upload.html:5
+#: documents/templates/documents/document_upload.html:6
 msgid "Upload Document"
 msgstr "Unggah Dokumen"
+
+#: documents/templates/documents/document_upload.html:26
+msgid "Select document file to upload"
+msgstr "Pilih file dokumen untuk diunggah"
+
+#: documents/templates/documents/document_upload.html:133
+#: layers/templates/upload/layer_upload.html:160
+msgid "Edit metadata"
+msgstr "Ubah metadata"
+
+#: documents/templates/documents/document_upload.html:320
+#: layers/templates/upload/layer_upload.html:344
+#: templates/search/_sort_filters.html:15
+msgid "Set permissions"
+msgstr "Mengatur hak akses"
 
 #: geoserver/helpers.py:974
 msgid "An exception occurred loading data to PostGIS"
@@ -1675,13 +1749,6 @@ msgstr "Ubah kepemilikan layer"
 msgid "External service layer"
 msgstr "Lapisan layanan eksternal"
 
-#: layers/templates/layers/layer_detail.html:212
-#: layers/templates/layers/layer_metadata.html:137
-#: layers/templates/upload/layer_upload.html:132
-#: layers/templates/upload/layer_upload.html:229
-msgid "Source"
-msgstr "Sumber"
-
 #: layers/templates/layers/layer_detail.html:222
 #: layers/templates/layers/layer_detail.html:229
 msgid "Edit Layer"
@@ -1799,37 +1866,6 @@ msgstr ""
 #: layers/templates/layers/layer_metadata.html:249 templates/_actions.html:5
 msgid "Attributes"
 msgstr "Atribut"
-
-#: layers/templates/layers/layer_metadata.html:51
-#: layers/templates/upload/layer_upload.html:167
-msgid "Please complete the required fields below."
-msgstr "Mohon lengkapi field yang diperlukan di bawah ini."
-
-#: layers/templates/layers/layer_metadata.html:69
-#: layers/templates/upload/layer_upload.html:123
-msgid "Coverage"
-msgstr "Cakupan"
-
-#: layers/templates/layers/layer_metadata.html:92
-#: layers/templates/upload/layer_upload.html:184
-msgid "Date created"
-msgstr "Tanggal dibuat"
-
-#: layers/templates/layers/layer_metadata.html:101
-#: layers/templates/upload/layer_upload.html:193
-msgid "Date published"
-msgstr "Tanggal dipublikasi"
-
-#: layers/templates/layers/layer_metadata.html:110
-#: layers/templates/upload/layer_upload.html:202
-msgid "Date revised"
-msgstr "Tanggal direvisi"
-
-#: layers/templates/layers/layer_metadata.html:129
-#: layers/templates/upload/layer_upload.html:142
-#: layers/templates/upload/layer_upload.html:221
-msgid "Year"
-msgstr "Tahun"
 
 #: layers/templates/layers/layer_metadata.html:253
 msgid "Attribute"
@@ -2000,16 +2036,7 @@ msgstr ""
 "Minimal diperlukan 4 file dalam format .shp, .shx, .prj, dan .dbf.<br> "
 "Contoh: shapefile.shp, shapefile.shx, shapefile.prj, shapefile.dbf"
 
-#: layers/templates/upload/layer_upload.html:160
-msgid "Edit metadata"
-msgstr "Ubah metadata"
-
-#: layers/templates/upload/layer_upload.html:345
-#: templates/search/_sort_filters.html:15
-msgid "Set permissions"
-msgstr "Mengatur hak akses"
-
-#: layers/templates/upload/layer_upload.html:363
+#: layers/templates/upload/layer_upload.html:362
 msgid "Upload files"
 msgstr "Unggah file"
 
