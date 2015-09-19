@@ -16,305 +16,323 @@
 {% block body %}
 
 <div class="col-md-8">
-  <form id="upload_form"  method="post" enctype="multipart/form-data" action="{% url "document_upload" %}">
-    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
-    
     <div id="steps-accordion" class="panel-group">
+      <form id="upload_form"  method="post" enctype="multipart/form-data" action="{% url "document_upload" %}">
+        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" data-parent="#steps-accordion" href="#collapseFileUpload">
+                Step 1 &raquo; {% trans "Select document file to upload" %}
+              </a>
+            </h4>
+          </div>
+          <div id="collapseFileUpload" class="panel-collapse collapse in">
+            <div class="panel-body">
+              <div id="form_document">
+                <div class="alert alert-danger hidden" role="alert">{% trans "Document must be a file or url." %}</div>
+                <div class="col-md-6 form-controls">
+                  <div class="form-group">
+                    <label for="{{ form.title.id_for_label }}" class="control-label required-field">{% trans form.title.label %}</label>
+                    {{ form.title|add_class:"form-control" }}
+                  </div>
+                  <div class="form-group">
+                    <label for="{{ form.doc_file.id_for_label }}" class="control-label">{% trans form.doc_file.label %}</label>
+                    {{ form.doc_file|add_class:"form-control" }}
+                  </div>
+                  <fieldset id="doc_type" class="form-group">
+                    <label class="control-label required-field">{% trans "Type" %}</label>
+                    {% autoescape off %}
+                    <div class="radio">
+                      <input type="radio" name="doc_type" value="Regulation">
+                        Regulation
+                    </div>
+                    <div class="radio">
+                      <input type="radio" name="doc_type" value="Development Document">
+                        Development Document
+                    </div>
+                    <div class="radio">
+                      <input type="radio" name="doc_type" value="other">
+                        Other
+                    </div>
+                    {% endautoescape %}
+                  </fieldset>
+                  <div class="form-group">
+                    <label for="{{ form.doc_url.id_for_label }}" class="control-label">{% trans form.doc_url.label %}</label>
+                    {{ form.doc_url|add_class:"form-control" }}
+                  </div>
+                  {{ form.permissions }}
+                  <div class="form-group">
+                    <label for="{{ form.resource.id_for_label }}" class="control-label">{% trans form.resource.label %}</label>
+                    {{ form.resource|add_class:"form-control" }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="panel panel-default hidden">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" data-parent="#steps-accordion" href="#collapseICRAF">
+                Step 1 &raquo; ICRAF
+              </a>
+            </h4>
+          </div>
+          <div id="collapseICRAF" class="panel-collapse collapse">
+            <div class="panel-body">
+              <div id="form_icraf_dr">
+                <div class="col-md-6 form-controls">
+                  <div class="form-group">
+                    <label for="icraf_dr_category" class="control-label">{% trans "Category" %}</label>
+                    <select id="icraf_dr_category" class="form-control" name="icraf_dr_category">
+                      {% for icraf_dr_category in icraf_dr_categories %}
+                      <option value={{ icraf_dr_category.id }}>{{ icraf_dr_category }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="icraf_dr_coverage" class="control-label">{% trans "Coverage" %}</label>
+                    <select id="icraf_dr_coverage" class="form-control" name="icraf_dr_coverage">
+                      {% for icraf_dr_coverage in icraf_dr_coverages %}
+                      <option value={{ icraf_dr_coverage.id }}>{{ icraf_dr_coverage }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <!-- # moved to metadata form group
+                  <div class="form-group">
+                    <label for="icraf_dr_source" class="control-label">{% trans "Source" %}</label>
+                    <select id="icraf_dr_source" class="form-control" name="icraf_dr_source">
+                      {% for icraf_dr_source in icraf_dr_sources %}
+                      <option value={{ icraf_dr_source.id }}>{{ icraf_dr_source }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  -->
+                  <!-- # replaces resource-edition metadata
+                  <div class="form-group">
+                    <label for="icraf_dr_year" class="control-label">{% trans "Year" %}</label>
+                    <select id="icraf_dr_year" class="form-control" name="icraf_dr_year">
+                      {% for icraf_dr_year in icraf_dr_years %}
+                      <option value={{ icraf_dr_year.id }}>{{ icraf_dr_year }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" data-parent="#steps-accordion" href="#collapseMetadata">
+                Step 2 &raquo; {% trans "Edit metadata" %}
+              </a>
+            </h4>
+          </div>
+          <div id="collapseMetadata" class="panel-collapse collapse">
+            <div class="panel-body">
+              <div id="form_metadata">
+                <div class="alert alert-danger hidden" role="alert">{% trans "Please complete the required fields below." %}</div>
+                <div class="col-md-6 form-controls">
+                  <div class="form-group">
+                    <label for="{{ document_form.owner.id_for_label }}" class="control-label">{% trans document_form.owner.label %}</label>
+                    {{ document_form.owner|add_class:"form-control" }}
+                  </div>
+                  <!--
+                  <div class="form-group">
+                    <label for="{{ document_form.title.id_for_label }}" class="control-label required-field">{% trans document_form.title.label %}</label>
+                    {{ document_form.title|add_class:"form-control" }}
+                  </div>
+                  -->
+                  <!-- # resource-date replaced with icraf_dr_date_created
+                  <div class="form-group">
+                    <label for="{{ document_form.date.id_for_label }}" class="control-label required-field">{% trans document_form.date.label %}</label>
+                    {{ document_form.date|add_class:"form-control" }}
+                  </div>
+                  -->
+                  <div class="form-group">
+                    <label for="icraf_dr_date_created" class="control-label required-field">{% trans "Date created" %}</label>
+                    <div class="input-group date" id="icraf_dr_date_created_picker">
+                      <input id="icraf_dr_date_created" class="form-control" name="icraf_dr_date_created" type="text" value="{% now "Y-m-d H:i" %}">
+                      <span class="input-group-addon">
+                        <span class="fa fa-calendar"></span>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="icraf_dr_date_published" class="control-label">{% trans "Date published" %}</label>
+                    <div class="input-group date" id="icraf_dr_date_published_picker">
+                      <input id="icraf_dr_date_published" class="form-control" name="icraf_dr_date_published" type="text">
+                      <span class="input-group-addon">
+                        <span class="fa fa-calendar"></span>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="icraf_dr_date_revised" class="control-label">{% trans "Date revised" %}</label>
+                    <div class="input-group date" id="icraf_dr_date_revised_picker">
+                      <input id="icraf_dr_date_revised" class="form-control" name="icraf_dr_date_revised" type="text">
+                      <span class="input-group-addon">
+                        <span class="fa fa-calendar"></span>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="{{ document_form.date_type.id_for_label }}" class="control-label required-field">{% trans document_form.date_type.label %}</label>
+                    {{ document_form.date_type|add_class:"form-control" }}
+                  </div>
+                  <!-- # resource-edition metadata replaced with icraf_dr_year
+                  <div class="form-group">
+                    <label for="{{ document_form.edition.id_for_label }}" class="control-label">{% trans document_form.edition.label %}</label>
+                    {{ document_form.edition|add_class:"form-control" }}
+                  </div>
+                  -->
+                  <div class="form-group">
+                    <label for="icraf_dr_year" class="control-label required-field">{% trans "Year" %}</label>
+                    <select id="icraf_dr_year" class="form-control" name="icraf_dr_year">
+                      {% for icraf_dr_year in icraf_dr_years %}
+                      <option value={{ icraf_dr_year.id }}>{{ icraf_dr_year }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="icraf_dr_source" class="control-label required-field">{% trans "Source" %}</label>
+                    <select id="icraf_dr_source" class="form-control" name="icraf_dr_source">
+                      {% for icraf_dr_source in icraf_dr_sources %}
+                      <option value={{ icraf_dr_source.id }}>{{ icraf_dr_source }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="{{ document_form.abstract.id_for_label }}" class="control-label required-field">{% trans document_form.abstract.label %}</label>
+                    {{ document_form.abstract|add_class:"form-control" }}
+                  </div>
+                  <div class="form-group">
+                    <label for="{{ document_form.purpose.id_for_label }}" class="control-label">{% trans document_form.purpose.label %}</label>
+                    {{ document_form.purpose|add_class:"form-control" }}
+                  </div>
+                  <div class="form-group">
+                    <label for="{{ document_form.maintenance_frequency.id_for_label }}" class="control-label">{% trans document_form.maintenance_frequency.label %}</label>
+                    {{ document_form.maintenance_frequency|add_class:"form-control" }}
+                  </div>
+                  <div class="form-group">
+                    <label for="{{ document_form.regions.id_for_label }}" class="control-label required-field">{% trans document_form.regions.label %}</label>
+                    {{ document_form.regions|add_class:"form-control" }}
+                  </div>
+                  <div class="form-group">
+                    <label for="{{ document_form.restriction_code_type.id_for_label }}" class="control-label">{% trans document_form.restriction_code_type.label %}</label>
+                    {{ document_form.restriction_code_type|add_class:"form-control" }}
+                  </div>
+                  <div class="form-group">
+                    <label for="{{ document_form.constraints_other.id_for_label }}" class="control-label">{% trans document_form.constraints_other.label %}</label>
+                    {{ document_form.constraints_other|add_class:"form-control" }}
+                  </div>
+                  <div class="form-group">
+                    <label for="{{ document_form.license.id_for_label }}" class="control-label">{% trans document_form.license.label %}</label>
+                    {{ document_form.license|add_class:"form-control" }}
+                  </div>
+                  <div class="form-group">
+                    <label for="{{ document_form.language.id_for_label }}" class="control-label required-field">{% trans document_form.language.label %}</label>
+                    {{ document_form.language|add_class:"form-control" }}
+                  </div>
+                  <div class="form-group">
+                    <label for="{{ document_form.spatial_representation_type.id_for_label }}" class="control-label">{% trans document_form.spatial_representation_type.label %}</label>
+                    {{ document_form.spatial_representation_type|add_class:"form-control" }}
+                  </div>
+                  <div class="form-group">
+                    <label for="{{ document_form.temporal_extent_start.id_for_label }}" class="control-label">{% trans document_form.temporal_extent_start.label %}</label>
+                    {{ document_form.temporal_extent_start|add_class:"form-control" }}
+                  </div>
+                  <div class="form-group">
+                    <label for="{{ document_form.temporal_extent_end.id_for_label }}" class="control-label">{% trans document_form.temporal_extent_end.label %}</label>
+                    {{ document_form.temporal_extent_end|add_class:"form-control" }}
+                  </div>
+                  <div class="form-group">
+                    <label for="{{ document_form.supplemental_information.id_for_label }}" class="control-label">{% trans document_form.supplemental_information.label %}</label>
+                    {{ document_form.supplemental_information|add_class:"form-control" }}
+                  </div>
+                  <div class="form-group">
+                    <label for="{{ document_form.distribution_url.id_for_label }}" class="control-label">{% trans document_form.distribution_url.label %}</label>
+                    {{ document_form.distribution_url|add_class:"form-control" }}
+                  </div>
+                  <div class="form-group">
+                    <label for="{{ document_form.distribution_description.id_for_label }}" class="control-label">{% trans document_form.distribution_description.label %}</label>
+                    {{ document_form.distribution_description|add_class:"form-control" }}
+                  </div>
+                  <div class="form-group">
+                    <label for="{{ document_form.data_quality_statement.id_for_label }}" class="control-label required-field">{% trans document_form.data_quality_statement.label %}</label>
+                    {{ document_form.data_quality_statement|add_class:"form-control" }}
+                  </div>
+                  <div class="form-group">
+                    <div class="checkbox">
+                      <label for="{{ document_form.featured.id_for_label }}">{{ document_form.featured }} {% trans document_form.featured.label %}</label>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="checkbox">
+                      <label for="{{ document_form.is_published.id_for_label }}" class="control-label">{{ document_form.is_published }} {% trans document_form.is_published.label %}</label>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="{{ document_form.thumbnail_url.id_for_label }}" class="control-label">{% trans document_form.thumbnail_url.label %}</label>
+                    {{ document_form.thumbnail_url|add_class:"form-control" }}
+                  </div>
+                  <div class="form-group">
+                    <label for="{{ document_form.keywords.id_for_label }}" class="control-label required-field">{% trans document_form.keywords.label %}</label>
+                    {{ document_form.keywords|add_class:"form-control" }}
+                  </div>
+                  <div class="form-group">
+                    <label for="{{ document_form.poc.id_for_label }}" class="control-label">{% trans document_form.poc.label %}</label>
+                    {{ document_form.poc|add_class:"form-control" }}
+                  </div>
+                  <div class="form-group">
+                    <label for="{{ document_form.metadata_author.id_for_label }}" class="control-label">{% trans document_form.metadata_author.label %}</label>
+                    {{ document_form.metadata_author|add_class:"form-control" }}
+                  </div>
+                  <fieldset id="category_form" class="form-group">
+                    <label class="control-label required-field">{% trans "Category" %}</label>
+                    {% autoescape off %}
+                    {% for choice in category_form.category_choice_field.field.choices %}
+                    <div class="radio">
+                      <input type="radio" name="category_choice_field" value="{{ choice.0 }}">
+                        {{ choice.1 }}
+                    </div>
+                    {% endfor %}
+                    {% endautoescape %}
+                  </fieldset>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+      
+      {% if GEONODE_SECURITY_ENABLED %}
       <div class="panel panel-default">
         <div class="panel-heading">
           <h4 class="panel-title">
-            <a data-toggle="collapse" data-parent="#steps-accordion" href="#collapseFileUpload">
-              Step 1 &raquo; {% trans "Select document file to upload" %}
+            <a data-toggle="collapse" data-parent="#steps-accordion" href="#collapsePermissions">
+              Step 3 &raquo; {% trans "Set permissions" %}
             </a>
           </h4>
         </div>
-        <div id="collapseFileUpload" class="panel-collapse collapse in">
+        <div id="collapsePermissions" class="panel-collapse collapse">
           <div class="panel-body">
-            <div id="form_document">
-              <div class="alert alert-danger hidden" role="alert">{% trans "Document must be a file or url." %}</div>
-              <div class="col-md-6 form-controls">
-                <div class="form-group">
-                  <label for="{{ form.title.id_for_label }}" class="control-label">{% trans form.title.label %}</label>
-                  {{ form.title|add_class:"form-control" }}
-                </div>
-                <div class="form-group">
-                  <label for="{{ form.doc_file.id_for_label }}" class="control-label">{% trans form.doc_file.label %}</label>
-                  {{ form.doc_file|add_class:"form-control" }}
-                </div>
-                <fieldset id="doc_type" class="form-group">
-                  <label class="control-label required-field">{% trans "Type" %}</label>
-                  {% autoescape off %}
-                  <div class="radio">
-                    <input type="radio" name="doc_type" value="Regulation">
-                      Regulation
-                  </div>
-                  <div class="radio">
-                    <input type="radio" name="doc_type" value="Development Document">
-                      Development Document
-                  </div>
-                  <div class="radio">
-                    <input type="radio" name="doc_type" value="other">
-                      Other
-                  </div>
-                  {% endautoescape %}
-                </fieldset>
-                <div class="form-group">
-                  <label for="{{ form.doc_url.id_for_label }}" class="control-label">{% trans form.doc_url.label %}</label>
-                  {{ form.doc_url|add_class:"form-control" }}
-                </div>
-                {{ form.permissions }}
-                <div class="form-group">
-                  <label for="{{ form.resource.id_for_label }}" class="control-label">{% trans form.resource.label %}</label>
-                  {{ form.resource|add_class:"form-control" }}
-                </div>
-              </div>
-            </div>
+            <form id="permission_form">
+              {% include "_permissions.html" %}
+            </form>
           </div>
         </div>
       </div>
-      
-      <div class="panel panel-default hidden">
-        <div class="panel-heading">
-          <h4 class="panel-title">
-            <a data-toggle="collapse" data-parent="#steps-accordion" href="#collapseICRAF">
-              Step 1 &raquo; ICRAF
-            </a>
-          </h4>
-        </div>
-        <div id="collapseICRAF" class="panel-collapse collapse">
-          <div class="panel-body">
-            <div id="form_icraf_dr">
-              <div class="col-md-6 form-controls">
-                <div class="form-group">
-                  <label for="icraf_dr_category" class="control-label">{% trans "Category" %}</label>
-                  <select id="icraf_dr_category" class="form-control" name="icraf_dr_category">
-                    {% for icraf_dr_category in icraf_dr_categories %}
-                    <option value={{ icraf_dr_category.id }}>{{ icraf_dr_category }}</option>
-                    {% endfor %}
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label for="icraf_dr_coverage" class="control-label">{% trans "Coverage" %}</label>
-                  <select id="icraf_dr_coverage" class="form-control" name="icraf_dr_coverage">
-                    {% for icraf_dr_coverage in icraf_dr_coverages %}
-                    <option value={{ icraf_dr_coverage.id }}>{{ icraf_dr_coverage }}</option>
-                    {% endfor %}
-                  </select>
-                </div>
-                <!-- # moved to metadata form group
-                <div class="form-group">
-                  <label for="icraf_dr_source" class="control-label">{% trans "Source" %}</label>
-                  <select id="icraf_dr_source" class="form-control" name="icraf_dr_source">
-                    {% for icraf_dr_source in icraf_dr_sources %}
-                    <option value={{ icraf_dr_source.id }}>{{ icraf_dr_source }}</option>
-                    {% endfor %}
-                  </select>
-                </div>
-                -->
-                <!-- # replaces resource-edition metadata
-                <div class="form-group">
-                  <label for="icraf_dr_year" class="control-label">{% trans "Year" %}</label>
-                  <select id="icraf_dr_year" class="form-control" name="icraf_dr_year">
-                    {% for icraf_dr_year in icraf_dr_years %}
-                    <option value={{ icraf_dr_year.id }}>{{ icraf_dr_year }}</option>
-                    {% endfor %}
-                  </select>
-                </div>
-                -->
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h4 class="panel-title">
-            <a data-toggle="collapse" data-parent="#steps-accordion" href="#collapseMetadata">
-              Step 2 &raquo; {% trans "Edit metadata" %}
-            </a>
-          </h4>
-        </div>
-        <div id="collapseMetadata" class="panel-collapse collapse">
-          <div class="panel-body">
-            <div id="form_metadata">
-              <div class="alert alert-danger hidden" role="alert">{% trans "Please complete the required fields below." %}</div>
-              <div class="col-md-6 form-controls">
-                <div class="form-group">
-                  <label for="{{ document_form.owner.id_for_label }}" class="control-label">{% trans document_form.owner.label %}</label>
-                  {{ document_form.owner|add_class:"form-control" }}
-                </div>
-                <!--
-                <div class="form-group">
-                  <label for="{{ document_form.title.id_for_label }}" class="control-label required-field">{% trans document_form.title.label %}</label>
-                  {{ document_form.title|add_class:"form-control" }}
-                </div>
-                -->
-                <!-- # resource-date replaced with icraf_dr_date_created
-                <div class="form-group">
-                  <label for="{{ document_form.date.id_for_label }}" class="control-label required-field">{% trans document_form.date.label %}</label>
-                  {{ document_form.date|add_class:"form-control" }}
-                </div>
-                -->
-                <div class="form-group">
-                  <label for="icraf_dr_date_created" class="control-label required-field">{% trans "Date created" %}</label>
-                  <div class="input-group date" id="icraf_dr_date_created_picker">
-                    <input id="icraf_dr_date_created" class="form-control" name="icraf_dr_date_created" type="text" value="{% now "Y-m-d H:i" %}">
-                    <span class="input-group-addon">
-                      <span class="fa fa-calendar"></span>
-                    </span>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="icraf_dr_date_published" class="control-label">{% trans "Date published" %}</label>
-                  <div class="input-group date" id="icraf_dr_date_published_picker">
-                    <input id="icraf_dr_date_published" class="form-control" name="icraf_dr_date_published" type="text">
-                    <span class="input-group-addon">
-                      <span class="fa fa-calendar"></span>
-                    </span>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="icraf_dr_date_revised" class="control-label">{% trans "Date revised" %}</label>
-                  <div class="input-group date" id="icraf_dr_date_revised_picker">
-                    <input id="icraf_dr_date_revised" class="form-control" name="icraf_dr_date_revised" type="text">
-                    <span class="input-group-addon">
-                      <span class="fa fa-calendar"></span>
-                    </span>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="{{ document_form.date_type.id_for_label }}" class="control-label required-field">{% trans document_form.date_type.label %}</label>
-                  {{ document_form.date_type|add_class:"form-control" }}
-                </div>
-                <!-- # resource-edition metadata replaced with icraf_dr_year
-                <div class="form-group">
-                  <label for="{{ document_form.edition.id_for_label }}" class="control-label">{% trans document_form.edition.label %}</label>
-                  {{ document_form.edition|add_class:"form-control" }}
-                </div>
-                -->
-                <div class="form-group">
-                  <label for="icraf_dr_year" class="control-label required-field">{% trans "Year" %}</label>
-                  <select id="icraf_dr_year" class="form-control" name="icraf_dr_year">
-                    {% for icraf_dr_year in icraf_dr_years %}
-                    <option value={{ icraf_dr_year.id }}>{{ icraf_dr_year }}</option>
-                    {% endfor %}
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label for="icraf_dr_source" class="control-label required-field">{% trans "Source" %}</label>
-                  <select id="icraf_dr_source" class="form-control" name="icraf_dr_source">
-                    {% for icraf_dr_source in icraf_dr_sources %}
-                    <option value={{ icraf_dr_source.id }}>{{ icraf_dr_source }}</option>
-                    {% endfor %}
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label for="{{ document_form.abstract.id_for_label }}" class="control-label required-field">{% trans document_form.abstract.label %}</label>
-                  {{ document_form.abstract|add_class:"form-control" }}
-                </div>
-                <div class="form-group">
-                  <label for="{{ document_form.purpose.id_for_label }}" class="control-label">{% trans document_form.purpose.label %}</label>
-                  {{ document_form.purpose|add_class:"form-control" }}
-                </div>
-                <div class="form-group">
-                  <label for="{{ document_form.maintenance_frequency.id_for_label }}" class="control-label">{% trans document_form.maintenance_frequency.label %}</label>
-                  {{ document_form.maintenance_frequency|add_class:"form-control" }}
-                </div>
-                <div class="form-group">
-                  <label for="{{ document_form.regions.id_for_label }}" class="control-label required-field">{% trans document_form.regions.label %}</label>
-                  {{ document_form.regions|add_class:"form-control" }}
-                </div>
-                <div class="form-group">
-                  <label for="{{ document_form.restriction_code_type.id_for_label }}" class="control-label">{% trans document_form.restriction_code_type.label %}</label>
-                  {{ document_form.restriction_code_type|add_class:"form-control" }}
-                </div>
-                <div class="form-group">
-                  <label for="{{ document_form.constraints_other.id_for_label }}" class="control-label">{% trans document_form.constraints_other.label %}</label>
-                  {{ document_form.constraints_other|add_class:"form-control" }}
-                </div>
-                <div class="form-group">
-                  <label for="{{ document_form.license.id_for_label }}" class="control-label">{% trans document_form.license.label %}</label>
-                  {{ document_form.license|add_class:"form-control" }}
-                </div>
-                <div class="form-group">
-                  <label for="{{ document_form.language.id_for_label }}" class="control-label required-field">{% trans document_form.language.label %}</label>
-                  {{ document_form.language|add_class:"form-control" }}
-                </div>
-                <div class="form-group">
-                  <label for="{{ document_form.spatial_representation_type.id_for_label }}" class="control-label">{% trans document_form.spatial_representation_type.label %}</label>
-                  {{ document_form.spatial_representation_type|add_class:"form-control" }}
-                </div>
-                <div class="form-group">
-                  <label for="{{ document_form.temporal_extent_start.id_for_label }}" class="control-label">{% trans document_form.temporal_extent_start.label %}</label>
-                  {{ document_form.temporal_extent_start|add_class:"form-control" }}
-                </div>
-                <div class="form-group">
-                  <label for="{{ document_form.temporal_extent_end.id_for_label }}" class="control-label">{% trans document_form.temporal_extent_end.label %}</label>
-                  {{ document_form.temporal_extent_end|add_class:"form-control" }}
-                </div>
-                <div class="form-group">
-                  <label for="{{ document_form.supplemental_information.id_for_label }}" class="control-label required-field">{% trans document_form.supplemental_information.label %}</label>
-                  {{ document_form.supplemental_information|add_class:"form-control" }}
-                </div>
-                <div class="form-group">
-                  <label for="{{ document_form.distribution_url.id_for_label }}" class="control-label">{% trans document_form.distribution_url.label %}</label>
-                  {{ document_form.distribution_url|add_class:"form-control" }}
-                </div>
-                <div class="form-group">
-                  <label for="{{ document_form.distribution_description.id_for_label }}" class="control-label">{% trans document_form.distribution_description.label %}</label>
-                  {{ document_form.distribution_description|add_class:"form-control" }}
-                </div>
-                <div class="form-group">
-                  <label for="{{ document_form.data_quality_statement.id_for_label }}" class="control-label required-field">{% trans document_form.data_quality_statement.label %}</label>
-                  {{ document_form.data_quality_statement|add_class:"form-control" }}
-                </div>
-                <div class="form-group">
-                  <div class="checkbox">
-                    <label for="{{ document_form.featured.id_for_label }}">{{ document_form.featured }} {% trans document_form.featured.label %}</label>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="checkbox">
-                    <label for="{{ document_form.is_published.id_for_label }}" class="control-label">{{ document_form.is_published }} {% trans document_form.is_published.label %}</label>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="{{ document_form.thumbnail_url.id_for_label }}" class="control-label">{% trans document_form.thumbnail_url.label %}</label>
-                  {{ document_form.thumbnail_url|add_class:"form-control" }}
-                </div>
-                <div class="form-group">
-                  <label for="{{ document_form.keywords.id_for_label }}" class="control-label required-field">{% trans document_form.keywords.label %}</label>
-                  {{ document_form.keywords|add_class:"form-control" }}
-                </div>
-                <div class="form-group">
-                  <label for="{{ document_form.poc.id_for_label }}" class="control-label">{% trans document_form.poc.label %}</label>
-                  {{ document_form.poc|add_class:"form-control" }}
-                </div>
-                <div class="form-group">
-                  <label for="{{ document_form.metadata_author.id_for_label }}" class="control-label">{% trans document_form.metadata_author.label %}</label>
-                  {{ document_form.metadata_author|add_class:"form-control" }}
-                </div>
-                <fieldset id="category_form" class="form-group">
-                  <label class="control-label required-field">{% trans "Category" %}</label>
-                  {% autoescape off %}
-                  {% for choice in category_form.category_choice_field.field.choices %}
-                  <div class="radio">
-                    <input type="radio" name="category_choice_field" value="{{ choice.0 }}">
-                      {{ choice.1 }}
-                  </div>
-                  {% endfor %}
-                  {% endautoescape %}
-                </fieldset>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      {% endif %}
     </div>
     
     <button type="submit" id="upload-button" class="btn btn-danger">Upload</button>
-  </form>
 
 </div>
 
@@ -323,10 +341,7 @@
 {% block sidebar %}
 
 <div class="col-md-4">
-  <h3>{% trans "Permissions"  %}</h3>
-  <form id="permission_form">
-    {% include "_permissions.html" %}
-  </form>
+  <!-- ICRAF: moved to main body -->
 </div>
 
 {% endblock %}

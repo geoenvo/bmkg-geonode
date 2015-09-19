@@ -563,12 +563,20 @@ class DocumentUploadView(CreateView):
             except:
                 print "Could not send slack message for new document."
 
-        return HttpResponseRedirect(
-            reverse(
-                'document_metadata',
-                args=(
-                    self.object.id,
-                )))
+        #^^return HttpResponseRedirect(
+        #^^    reverse(
+        #^^        'document_metadata',
+        #^^        args=(
+        #^^            self.object.id,
+        #^^        )))
+
+        #^^ redirect to document detail instead of document metadata page
+        return HttpResponseRedirect( #^^
+            reverse( #^^
+                'document_detail', #^^
+                args=( #^^
+                    self.object.id, #^^
+                ))) #^^
 
 
 class DocumentUpdateView(UpdateView):
@@ -587,13 +595,34 @@ class DocumentUpdateView(UpdateView):
         """
         If the form is valid, save the associated model.
         """
-        self.object = form.save()
-        return HttpResponseRedirect(
-            reverse(
-                'document_metadata',
-                args=(
-                    self.object.id,
-                )))
+        self.object = form.save(commit=False) #^^
+        
+        try: #^^
+            main = Main.objects.get(document=self.object) #^^
+            main_id = main.id #^^
+            self.object.main_id = main_id #^^
+            main.basename = form.cleaned_data['doc_file'].name #^^
+            main.save() #^^
+        except: #^^
+            pass #^^
+        
+        self.object.save() #^^
+        
+        #^^self.object = form.save()
+        #^^return HttpResponseRedirect(
+        #^^    reverse(
+        #^^        'document_metadata',
+        #^^        args=(
+        #^^            self.object.id,
+        #^^        )))
+        
+        #^^ redirect to document detail instead of document metadata page
+        return HttpResponseRedirect( #^^
+            reverse( #^^
+                'document_detail', #^^
+                args=( #^^
+                    self.object.id, #^^
+                ))) #^^
 
 
 @login_required
@@ -637,8 +666,80 @@ def document_metadata(
         topic_category = document.category
 
         if request.method == "POST":
+            icraf_dr_category =Category.objects.get(pk=request.POST['icraf_dr_category']) #^^
+            icraf_dr_coverage =Coverage.objects.get(pk=request.POST['icraf_dr_coverage']) #^^
+            icraf_dr_source =Source.objects.get(pk=request.POST['icraf_dr_source']) #^^
+            icraf_dr_year =Year.objects.get(pk=request.POST['icraf_dr_year']) #^^
+            icraf_dr_date_created = request.POST['icraf_dr_date_created'] #^^
+            icraf_dr_date_published = request.POST['icraf_dr_date_published'] #^^
+            icraf_dr_date_revised = request.POST['icraf_dr_date_revised'] #^^
+            
+            #^^ validate date format
+            if (len(icraf_dr_date_created)): #^^
+                try: #^^
+                    parse(icraf_dr_date_created) #^^
+                except ValueError: #^^
+                    icraf_dr_date_created = None #^^
+            else: #^^
+                icraf_dr_date_created = None #^^
+            
+            if (len(icraf_dr_date_published)): #^^
+                try: #^^
+                    parse(icraf_dr_date_published) #^^
+                except ValueError: #^^
+                    icraf_dr_date_published = None #^^
+            else: #^^
+                icraf_dr_date_published = None #^^
+            
+            if (len(icraf_dr_date_revised)): #^^
+                try: #^^
+                    parse(icraf_dr_date_revised) #^^
+                except ValueError: #^^
+                    icraf_dr_date_revised = None #^^
+            else: #^^
+                icraf_dr_date_revised = None #^^
+            
+            try: #^^
+                main_topic_category = TopicCategory(id=request.POST['category_choice_field']) #^^
+            except: #^^
+                main_topic_category = None #^^
+            
+            main_regions = ','.join(request.POST.getlist('resource-regions')) #^^ save as comma separated ids
+            
+            main_defaults = { #^^
+                'category': icraf_dr_category, #^^
+                'coverage': icraf_dr_coverage, #^^
+                'source': icraf_dr_source, #^^
+                'year': icraf_dr_year, #^^
+                'topic_category': main_topic_category, #^^
+                'regions': main_regions, #^^
+                'date_created': icraf_dr_date_created, #^^
+                'date_published': icraf_dr_date_published, #^^
+                'date_revised': icraf_dr_date_revised #^^
+            } #^^
+            
+            main, main_created = Main.objects.get_or_create(document=document, defaults=main_defaults) #^^
+            
+            if not main_created: #^^
+                main.category = icraf_dr_category #^^
+                main.coverage = icraf_dr_coverage #^^
+                main.source = icraf_dr_source #^^
+                main.year = icraf_dr_year #^^
+                main.topic_category = main_topic_category #^^
+                main.regions = main_regions #^^
+                main.date_created = icraf_dr_date_created #^^
+                main.date_published = icraf_dr_date_published #^^
+                main.date_revised = icraf_dr_date_revised #^^
+                main.save() #^^
+            
+            #^^ override resource-date with icraf_dr_date_created
+            #^^ override resource-edition with icraf_dr_year
+            request_post = request.POST.copy() #^^
+            request_post['resource-date'] = icraf_dr_date_created #^^
+            request_post['resource-edition'] = icraf_dr_year.year_num #^^
+            
             document_form = DocumentForm(
-                request.POST,
+                request_post, #^^ replace request.POST
                 instance=document,
                 prefix="resource")
             category_form = CategoryForm(
@@ -651,6 +752,15 @@ def document_metadata(
             category_form = CategoryForm(
                 prefix="category_choice_field",
                 initial=topic_category.id if topic_category else None)
+            
+            icraf_dr_categories = Category.objects.order_by('cat_num') #^^
+            icraf_dr_coverages = Coverage.objects.order_by('cov_num') #^^
+            icraf_dr_sources = Source.objects.order_by('src_num') #^^
+            icraf_dr_years = Year.objects.order_by('year_num') #^^
+            try: #^^
+                icraf_dr_main = Main.objects.get(document=document) #^^
+            except: #^^
+                icraf_dr_main = None #^^
 
         if request.method == "POST" and document_form.is_valid(
         ) and category_form.is_valid():
@@ -686,6 +796,16 @@ def document_metadata(
                 the_document.metadata_author = new_author
                 the_document.keywords.add(*new_keywords)
                 Document.objects.filter(id=the_document.id).update(category=new_category)
+                
+                #^^ start update doc_type
+                doc_type = request.POST.get('doc_type', None) #^^
+                
+                if doc_type:
+                    try:
+                        Document.objects.filter(id=the_document.id).update(doc_type=doc_type)
+                    except:
+                        pass
+                #^^ end
 
                 if getattr(settings, 'SLACK_ENABLED', False):
                     try:
@@ -730,6 +850,11 @@ def document_metadata(
             "poc_form": poc_form,
             "author_form": author_form,
             "category_form": category_form,
+            'icraf_dr_categories': icraf_dr_categories, #^^
+            'icraf_dr_coverages': icraf_dr_coverages, #^^
+            'icraf_dr_sources': icraf_dr_sources, #^^
+            'icraf_dr_years': icraf_dr_years, #^^
+            'icraf_dr_main': icraf_dr_main, #^^
         }))
 
 
@@ -769,6 +894,12 @@ def document_remove(request, docid, template='documents/document_remove.html'):
 
         if request.method == 'POST':
 
+            try: #^^
+                main = Main.objects.get(document=document) #^^
+                main.delete() #^^
+            except: #^^
+                pass #^^
+            
             if getattr(settings, 'SLACK_ENABLED', False):
                 slack_message = None
                 try:
