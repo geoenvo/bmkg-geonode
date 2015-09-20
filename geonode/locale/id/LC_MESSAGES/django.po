@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GeoNode\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-19 11:20-0500\n"
+"POT-Creation-Date: 2015-09-19 23:47-0500\n"
 "PO-Revision-Date: 2015-07-16 10:36+0000\n"
 "Last-Translator: Julien Collaer <julien.collaer@opengeode.be>\n"
 "Language-Team: Indonesian (http://www.transifex.com/p/geonode/language/id/)\n"
@@ -153,12 +153,12 @@ msgid "No information provided"
 msgstr "Tidak tersedia informasi"
 
 #: base/forms.py:43 base/templates/base/resourcebase_info_panel.html:63
-#: documents/templates/documents/document_metadata.html:69
-#: documents/templates/documents/document_metadata.html:288
+#: documents/templates/documents/document_metadata.html:76
+#: documents/templates/documents/document_metadata.html:295
 #: documents/templates/documents/document_upload.html:88
 #: documents/templates/documents/document_upload.html:298
-#: layers/templates/layers/layer_metadata.html:61
-#: layers/templates/layers/layer_metadata.html:235
+#: layers/templates/layers/layer_metadata.html:69
+#: layers/templates/layers/layer_metadata.html:243
 #: layers/templates/upload/layer_upload.html:115
 #: layers/templates/upload/layer_upload.html:323
 #: maps/templates/maps/map_metadata.html:61
@@ -445,13 +445,17 @@ msgstr "Wali data, Point of Contact, Metadata Penulis"
 
 #: base/templates/base/_resourcebase_contact_snippet.html:14
 #: base/templates/base/resourcebase_info_panel.html:90
-#: documents/templates/documents/document_metadata.html:276
-#: layers/templates/layers/layer_metadata.html:271
+#: documents/templates/documents/document_metadata.html:34
+#: documents/templates/documents/document_metadata.html:283
+#: layers/templates/layers/layer_metadata.html:37
+#: layers/templates/layers/layer_metadata.html:279
 #: maps/templates/maps/map_metadata.html:51
 msgid "Point of Contact"
 msgstr "Kontak"
 
 #: base/templates/base/_resourcebase_contact_snippet.html:18
+#: documents/templates/documents/document_metadata.html:30
+#: layers/templates/layers/layer_metadata.html:33
 msgid "Metadata Author"
 msgstr "Metadata Pengarang"
 
@@ -484,7 +488,7 @@ msgid "Date"
 msgstr "Tanggal"
 
 #: base/templates/base/resourcebase_info_panel.html:46
-#: documents/templates/documents/document_metadata.html:51
+#: documents/templates/documents/document_metadata.html:58
 #: documents/templates/documents/document_upload.html:44
 #: layers/templates/layers/layer_detail.html:213
 msgid "Type"
@@ -755,33 +759,41 @@ msgstr "URL dari dokumen jika eksternal."
 msgid "URL"
 msgstr "URL"
 
-#: documents/views.py:40
+#: documents/views.py:41
 msgid "You are not permitted to delete this document"
 msgstr "Anda tidak diizinkan untuk menghapus dokumen ini"
 
-#: documents/views.py:41
+#: documents/views.py:42
 msgid "You do not have permissions for this document."
 msgstr "Anda tidak memiliki izin untuk dokumen ini"
 
-#: documents/views.py:42
+#: documents/views.py:43
 msgid "You are not permitted to modify this document"
 msgstr "Anda tidak diizinkan untuk memodifikasi dokumen ini"
 
-#: documents/views.py:44
+#: documents/views.py:45
 msgid "You are not permitted to modify this document's metadata"
 msgstr "Anda tidak diizinkan untuk memodifikasi metadata dokumen ini"
 
-#: documents/views.py:45
+#: documents/views.py:46
 msgid "You are not permitted to view this document"
 msgstr "Anda tidak diizinkan untuk melihat dokumen ini"
 
-#: documents/views.py:81 documents/views.py:147 documents/views.py:158
+#: documents/views.py:82 documents/views.py:148 documents/views.py:159
 msgid "You are not allowed to view this document."
-msgstr "Anda tidak diijinkan untuk melihat dokumen ini"
+msgstr "Anda tidak diizinkan untuk melihat dokumen ini"
 
-#: documents/views.py:654
+#: documents/views.py:655
 msgid "You are not allowed to edit this document."
 msgstr "Anda tidak diizinkan untuk mengedit dokumen ini."
+
+#: documents/views.py:786 layers/views.py:624
+msgid "You must set a point of contact for this resource"
+msgstr "Anda harus tentukan kontak untuk sumberdaya ini"
+
+#: documents/views.py:801 layers/views.py:639
+msgid "You must set an author for this resource"
+msgstr "Anda harus tentukan pengarang untuk sumberdaya ini"
 
 #: documents/management/__init__.py:14
 msgid "Document Created"
@@ -966,72 +978,72 @@ msgstr "Mengubah detil untuk"
 msgid "Error updating metadata.  Please check the following fields: "
 msgstr "Kesalahan pembaharuan metadata. Silakan cek field berikut:"
 
-#: documents/templates/documents/document_metadata.html:42
+#: documents/templates/documents/document_metadata.html:49
 #: documents/templates/documents/document_upload.html:140
-#: layers/templates/layers/layer_metadata.html:51
+#: layers/templates/layers/layer_metadata.html:59
 #: layers/templates/upload/layer_upload.html:167
 msgid "Please complete the required fields below."
 msgstr "Mohon lengkapi field yang diperlukan di bawah ini."
 
-#: documents/templates/documents/document_metadata.html:45
-#: documents/templates/documents/document_metadata.html:306
+#: documents/templates/documents/document_metadata.html:52
+#: documents/templates/documents/document_metadata.html:313
 #: groups/templates/groups/group_update.html:26
-#: layers/templates/layers/layer_metadata.html:54
-#: layers/templates/layers/layer_metadata.html:282
+#: layers/templates/layers/layer_metadata.html:62
+#: layers/templates/layers/layer_metadata.html:290
 #: maps/templates/maps/map_metadata.html:44
 #: maps/templates/maps/map_metadata.html:78
 msgid "Update"
 msgstr "Ubah"
 
-#: documents/templates/documents/document_metadata.html:78
+#: documents/templates/documents/document_metadata.html:85
 #: documents/templates/documents/document_upload.html:96
-#: layers/templates/layers/layer_metadata.html:69
+#: layers/templates/layers/layer_metadata.html:77
 #: layers/templates/upload/layer_upload.html:123
 msgid "Coverage"
 msgstr "Cakupan"
 
-#: documents/templates/documents/document_metadata.html:104
+#: documents/templates/documents/document_metadata.html:111
 #: documents/templates/documents/document_upload.html:159
-#: layers/templates/layers/layer_metadata.html:92
+#: layers/templates/layers/layer_metadata.html:100
 #: layers/templates/upload/layer_upload.html:184
 msgid "Date created"
 msgstr "Tanggal dibuat"
 
-#: documents/templates/documents/document_metadata.html:114
+#: documents/templates/documents/document_metadata.html:121
 #: documents/templates/documents/document_upload.html:168
-#: layers/templates/layers/layer_metadata.html:101
+#: layers/templates/layers/layer_metadata.html:109
 #: layers/templates/upload/layer_upload.html:193
 msgid "Date published"
 msgstr "Tanggal dipublikasi"
 
-#: documents/templates/documents/document_metadata.html:124
+#: documents/templates/documents/document_metadata.html:131
 #: documents/templates/documents/document_upload.html:177
-#: layers/templates/layers/layer_metadata.html:110
+#: layers/templates/layers/layer_metadata.html:118
 #: layers/templates/upload/layer_upload.html:202
 msgid "Date revised"
 msgstr "Tanggal direvisi"
 
-#: documents/templates/documents/document_metadata.html:146
+#: documents/templates/documents/document_metadata.html:153
 #: documents/templates/documents/document_upload.html:115
 #: documents/templates/documents/document_upload.html:196
-#: layers/templates/layers/layer_metadata.html:129
+#: layers/templates/layers/layer_metadata.html:137
 #: layers/templates/upload/layer_upload.html:142
 #: layers/templates/upload/layer_upload.html:221
 msgid "Year"
 msgstr "Tahun"
 
-#: documents/templates/documents/document_metadata.html:154
+#: documents/templates/documents/document_metadata.html:161
 #: documents/templates/documents/document_upload.html:105
 #: documents/templates/documents/document_upload.html:204
 #: layers/templates/layers/layer_detail.html:212
-#: layers/templates/layers/layer_metadata.html:137
+#: layers/templates/layers/layer_metadata.html:145
 #: layers/templates/upload/layer_upload.html:132
 #: layers/templates/upload/layer_upload.html:229
 msgid "Source"
 msgstr "Sumber"
 
-#: documents/templates/documents/document_metadata.html:282
-#: layers/templates/layers/layer_metadata.html:276
+#: documents/templates/documents/document_metadata.html:289
+#: layers/templates/layers/layer_metadata.html:284
 #: maps/templates/maps/map_metadata.html:56
 msgid "Metadata Provider"
 msgstr "Provider Metadata"
@@ -1228,7 +1240,7 @@ msgid "Logo"
 msgstr ""
 
 #: groups/models.py:37 layers/templates/layers/layer_detail.html:74
-#: layers/templates/layers/layer_metadata.html:255
+#: layers/templates/layers/layer_metadata.html:263
 #: people/templates/people/profile_detail.html:73 services/forms.py:27
 #: services/templates/services/layers_register.html:28
 msgid "Description"
@@ -1612,7 +1624,7 @@ msgstr "modifikasi terakhir"
 msgid "date when attribute statistics were last updated"
 msgstr "tanggal ketika statistik atribut diperbaharui"
 
-#: layers/views.py:79
+#: layers/views.py:80
 msgid ""
 "There was an error while attempting to upload your data. Please try again, "
 "or contact and administrator if the problem continues."
@@ -1620,39 +1632,39 @@ msgstr ""
 "Terdapat kesalahan saat melakukan unggah data Anda. Silakan coba lagi atau "
 "hubungi administrator jika permasalahan masih berlanjut."
 
-#: layers/views.py:82
+#: layers/views.py:83
 msgid "You are not permitted to delete this layer"
 msgstr "Anda tidak diijinkan untuk menghapus peta ini"
 
-#: layers/views.py:83
+#: layers/views.py:84
 msgid "You do not have permissions for this layer."
 msgstr "Anda tidak memiliki izin untuk layer ini"
 
-#: layers/views.py:84
+#: layers/views.py:85
 msgid "You are not permitted to modify this layer"
 msgstr "Anda tidak diijinkan untuk mengubah layer peta ini"
 
-#: layers/views.py:86
+#: layers/views.py:87
 msgid "You are not permitted to modify this layer's metadata"
 msgstr "Anda tidak diizinkan untuk memodifikasi metadata layer ini"
 
-#: layers/views.py:87
+#: layers/views.py:88
 msgid "You are not permitted to view this layer"
 msgstr "Anda tidak diijinkan untuk melihat layer peta ini"
 
-#: layers/views.py:745
+#: layers/views.py:754
 msgid "You are attempting to replace a vector layer with a raster."
 msgstr "Anda mencoba untuk mengganti sebuah layer vector dengan sebuah raster."
 
-#: layers/views.py:748
+#: layers/views.py:757
 msgid "You are attempting to replace a raster layer with a vector."
 msgstr "Anda mencoba untuk mengganti sebuah layer raster dengan sebuah vector."
 
-#: layers/views.py:814
+#: layers/views.py:823
 msgid "Unable to delete layer"
 msgstr "Tidak dapat menghapus layer"
 
-#: layers/views.py:817
+#: layers/views.py:826
 msgid ""
 "This layer is a member of a layer group, you must remove the layer from the "
 "group before deleting."
@@ -1713,7 +1725,7 @@ msgid "Attribute Name"
 msgstr "Nama Atribut"
 
 #: layers/templates/layers/layer_detail.html:73
-#: layers/templates/layers/layer_metadata.html:254
+#: layers/templates/layers/layer_metadata.html:262
 msgid "Label"
 msgstr "Label"
 
@@ -1862,16 +1874,16 @@ msgid ""
 "          Some of your original metadata may have been lost."
 msgstr ""
 
-#: layers/templates/layers/layer_metadata.html:38
-#: layers/templates/layers/layer_metadata.html:249 templates/_actions.html:5
+#: layers/templates/layers/layer_metadata.html:46
+#: layers/templates/layers/layer_metadata.html:257 templates/_actions.html:5
 msgid "Attributes"
 msgstr "Atribut"
 
-#: layers/templates/layers/layer_metadata.html:253
+#: layers/templates/layers/layer_metadata.html:261
 msgid "Attribute"
 msgstr "Atribut"
 
-#: layers/templates/layers/layer_metadata.html:256
+#: layers/templates/layers/layer_metadata.html:264
 msgid "Display Order"
 msgstr "Urutan tampilan"
 
