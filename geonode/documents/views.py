@@ -104,8 +104,9 @@ def document_detail(request, docid):
             name__in=settings.DOWNLOAD_FORMATS_METADATA)
 
         viewdoc = True #^^
-        doc_file_path = settings.PROJECT_ROOT + document.doc_file.url #^^
+        doc_file_path = document.doc_file.path #^^
         MAX_CONVERT_MB = settings.MAX_DOCUMENT_SIZE #^^
+        
         if (os.path.getsize(doc_file_path) / 1024 / 1024) > MAX_CONVERT_MB: #^^
             viewdoc = False #^^
         
@@ -162,10 +163,12 @@ def document_view(request, docid):
         )
     
     viewerjs_path = '/static/js/viewerjs/#../../..'
-    input_file_path = settings.PROJECT_ROOT + document.doc_file.url
+    input_file_path = document.doc_file.path
     output_dir = 'tmpdoc/'
     output_path = settings.MEDIA_ROOT + '/' + output_dir
     output_format = None
+    document_title = document.title
+    document_url = document.doc_file.url
     document_extension = document.extension.lower()
     
     # don't convert if doc file is too big, send straight to download
@@ -174,9 +177,6 @@ def document_view(request, docid):
         return HttpResponseRedirect(document.doc_file.url)
     
     if document_extension in ['csv', 'dbf']: # csv format supported by recline.js
-        document_title = document.title
-        document_url = document.doc_file.url
-        
         if document_extension == 'dbf': # convert dbf to csv first
             output_format = 'csv'
             output_file = os.path.basename(os.path.splitext(input_file_path)[0]) + '.' + output_format
@@ -212,14 +212,30 @@ def document_view(request, docid):
         if document_extension in ['doc', 'docx', 'ppt', 'pptx']: # better view support in pdf format
             output_format = 'pdf'
         else:
-            output_format = 'ods' # better view support for spreadsheets in ods format
+            output_format = 'csv' # 20150921 convert to csv first for reclinejs
+            #output_format = 'ods' # better view support for spreadsheets in ods format
         
         output_file = os.path.basename(os.path.splitext(input_file_path)[0]) + '.' + output_format
         output_file_path = output_path + output_file
         
         try:
             subprocess.check_call(['unoconv', '--format', output_format, '--output', output_file_path, input_file_path])
+            
             if os.path.exists(output_file_path):
+                if document_extension in ['xls', 'xlsx']: # use reclinejs to preview converted xls document
+                    document_url = settings.MEDIA_URL + output_dir + output_file
+                    
+                    return render_to_response(
+                        "documents/document_view_recline.html",
+                        RequestContext(
+                            request,
+                            {
+                                'document_title': document_title,
+                                'document_url': document_url,
+                            }
+                        )
+                    )
+                
                 return HttpResponseRedirect(viewerjs_path + settings.MEDIA_URL + output_dir + output_file)
             else:
                 return HttpResponse('File preview error, please try again.', status=500)
