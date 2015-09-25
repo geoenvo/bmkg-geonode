@@ -35,6 +35,9 @@ from django.core.validators import URLValidator #^^
 from django.contrib.auth import get_user_model #^^
 from geonode.base.models import SpatialRepresentationType, RestrictionCodeType, License #^^
 from django.core.exceptions import ValidationError #^^
+from geonode.groups.models import GroupProfile #^^
+if 'notification' in settings.INSTALLED_APPS: #^^
+    from notification import models as notification #^^
 
 ALLOWED_DOC_TYPES = settings.ALLOWED_DOCUMENT_TYPES
 
@@ -360,7 +363,17 @@ class DocumentUploadView(CreateView):
             main.delete() #^^
         
         #^^ self.object.save()
-        self.object.set_permissions(form.cleaned_data['permissions'])
+        #^^self.object.set_permissions(form.cleaned_data['permissions'])
+        
+        document = None #^^
+        try: #^^
+            #^^ alternate permission saving method
+            print 'debug' #^^
+            print self.object.id #^^
+            document = Document.objects.get(id=self.object.id) #^^
+            document.set_permissions(form.cleaned_data['permissions']) #^^
+        except: #^^
+            pass #^^
 
         abstract = None
         date = None
@@ -490,12 +503,12 @@ class DocumentUploadView(CreateView):
             except ValidationError:
                 pass
         
-        if len(keywords) > 0:
+        if len(keywords) > 0 and document != None:
             keywords = [keyword.strip() for keyword in keywords.split(',')]
-            self.object.keywords.add(*keywords)
+            document.keywords.add(*keywords)
         
-        if len(regions) > 0:
-            self.object.regions.add(*regions)
+        if len(regions) > 0 and document != None:
+            document.regions.add(*regions)
         
         if poc and poc.isdigit():
             try:
@@ -586,6 +599,22 @@ class DocumentUploadView(CreateView):
         #^^        args=(
         #^^            self.object.id,
         #^^        )))
+        
+        #^^ start send email notification to 'Pengelola Basis Data' group managers
+        if 'notification' in settings.INSTALLED_APPS and document != None:
+            try:
+                group_approver = GroupProfile.objects.get(title='Pengelola Basis Data')
+                if group_approver:
+                    group_managers = group_approver.get_managers()
+                    if group_managers:
+                        notif_ctx = {
+                            'resource': document,
+                        }
+                        print 'sending notification'
+                        notification.send(group_managers, 'document_created', notif_ctx)
+            except:
+                pass
+        #^^ end
 
         #^^ redirect to document detail instead of document metadata page
         return HttpResponseRedirect( #^^

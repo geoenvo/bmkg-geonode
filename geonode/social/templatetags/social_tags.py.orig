@@ -60,9 +60,6 @@ def activity_item(action, **kwargs):
 
     if raw_action == 'created' and object_type == 'layer':
         activity_class = 'upload'
-    
-    if raw_action == 'created' and object_type == 'document': #^^
-        activity_class = 'upload' #^^
 
     ctx = dict(
         activity_class=activity_class,

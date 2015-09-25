@@ -96,6 +96,9 @@ def activity_post_modify_object(sender, instance, created=None, **kwargs):
                                       updated_verb=_("updated a comment"),
                                       )
     action_settings['layer'].update(created_verb=_('uploaded'))
+    
+    action_settings['document'].update(object_name=getattr(instance, 'title', None),) #^^
+    action_settings['document'].update(created_verb=_('uploaded')) #^^
 
     action = action_settings[obj_type]
     if created:
@@ -149,6 +152,9 @@ if activity:
 
     signals.post_save.connect(activity_post_modify_object, sender=Map)
     signals.post_delete.connect(activity_post_modify_object, sender=Map)
+    
+    signals.post_save.connect(activity_post_modify_object, sender=Document) #^^
+    signals.post_delete.connect(activity_post_modify_object, sender=Document) #^^
 
 
 if notification_app:
@@ -160,8 +166,8 @@ if notification_app:
         notice_type_label = '%s_created' if created else '%s_updated'
         notice_type_label = notice_type_label % instance.class_name.lower()
             
-        #^^ do not send notification for layer_created, do it manually on upload
-        if notice_type_label != 'layer_created': #^^
+        #^^ do not send notification for layer_created and document_created, do it manually on upload
+        if notice_type_label != 'layer_created' and notice_type_label != 'document_created': #^^
             recipients = get_notification_recipients(notice_type_label)
             notification.send(recipients, notice_type_label, {'resource': instance})
 

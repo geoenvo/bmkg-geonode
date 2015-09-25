@@ -20,7 +20,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GeoNode\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-22 08:06-0500\n"
+"POT-Creation-Date: 2015-09-25 02:21-0500\n"
 "PO-Revision-Date: 2015-09-22 08:17+0000\n"
 "Last-Translator: Julien Collaer <julien.collaer@opengeode.be>\n"
 "Language-Team: Indonesian (http://www.transifex.com/geonode/geonode/language/"
@@ -1309,7 +1309,7 @@ msgid "Maps"
 msgstr "Peta"
 
 #: groups/templates/groups/activity.html:27
-#: social/templates/social/activity_list.html:23 templates/_actions.html:16
+#: social/templates/social/activity_list.html:24 templates/_actions.html:16
 #: templates/_comments.html:12
 msgid "Comments"
 msgstr "Komentar"
@@ -1318,10 +1318,11 @@ msgstr "Komentar"
 #: groups/templates/groups/activity.html:44
 #: groups/templates/groups/activity.html:53
 #: groups/templates/groups/activity.html:62
-#: social/templates/social/activity_list.html:31
-#: social/templates/social/activity_list.html:40
-#: social/templates/social/activity_list.html:49
-#: social/templates/social/activity_list.html:58
+#: social/templates/social/activity_list.html:32
+#: social/templates/social/activity_list.html:41
+#: social/templates/social/activity_list.html:50
+#: social/templates/social/activity_list.html:60
+#: social/templates/social/activity_list.html:70
 #: templates/actstream/actor.html:28
 msgid "No actions yet"
 msgstr "Belum ada aktivitas"
@@ -2916,7 +2917,8 @@ msgstr "Tidak ada Grup"
 msgid "All contents"
 msgstr "Semua konten"
 
-#: people/templates/people/_profile_filters.html:7 templates/500.html:61
+#: people/templates/people/_profile_filters.html:7
+#: social/templates/social/activity_list.html:23 templates/500.html:61
 #: templates/base.html:62
 msgid "Documents"
 msgstr "Dokumen"
@@ -3294,7 +3296,7 @@ msgstr "Tambahkan komentar"
 msgid "updated a comment"
 msgstr "perbaharui komentar"
 
-#: social/signals.py:98 social/tests.py:54
+#: social/signals.py:98 social/signals.py:101 social/tests.py:54
 msgid "uploaded"
 msgstr "unggah"
 
