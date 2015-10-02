@@ -555,8 +555,8 @@ PYCSW = {
         #},
         'metadata:main': {
             'identification_title': 'GeoNode Catalogue',
-            'identification_abstract': 'GeoNode is an open source platform that facilitates the creation, sharing, \
-             and collaborative use of geospatial data',
+            'identification_abstract': 'GeoNode is an open source platform that facilitates the creation, sharing, ' \
+            'and collaborative use of geospatial data',
             'identification_keywords': 'sdi,catalogue,discovery,metadata,GeoNode',
             'identification_keywords_type': 'theme',
             'identification_fees': 'None',
@@ -696,11 +696,6 @@ LOCKDOWN_GEONODE = False
 # Add additional paths (as regular expressions) that don't require
 # authentication.
 AUTH_EXEMPT_URLS = ()
-
-if LOCKDOWN_GEONODE:
-    MIDDLEWARE_CLASSES = MIDDLEWARE_CLASSES + \
-        ('geonode.security.middleware.LoginRequiredMiddleware',)
-
 
 # A tuple of hosts the proxy can send requests to.
 PROXY_ALLOWED_HOSTS = ()
@@ -886,6 +881,11 @@ try:
 except ImportError:
     pass
 
+
+# Require users to authenticate before using Geonode
+if LOCKDOWN_GEONODE:
+    MIDDLEWARE_CLASSES = MIDDLEWARE_CLASSES + \
+        ('geonode.security.middleware.LoginRequiredMiddleware',)
 
 #for windows users check if they didn't set GEOS and GDAL in local_settings.py
 #maybe they set it as a windows environment
