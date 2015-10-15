@@ -66,6 +66,22 @@
               Development Document
           </div>
           <div class="radio">
+            <input type="radio" name="doc_type" value="Text Documents"{% ifequal document.doc_type "Text Documents" %} checked="checked"{% endifequal %}>
+              Text Documents
+          </div>
+          <div class="radio">
+            <input type="radio" name="doc_type" value="Tabular Data"{% ifequal document.doc_type "Tabular Data" %} checked="checked"{% endifequal %}>
+              Tabular Data
+          </div>
+          <div class="radio">
+            <input type="radio" name="doc_type" value="Pictures"{% ifequal document.doc_type "Pictures" %} checked="checked"{% endifequal %}>
+              Pictures
+          </div>
+          <div class="radio">
+            <input type="radio" name="doc_type" value="Static Maps"{% ifequal document.doc_type "Static Maps" %} checked="checked"{% endifequal %}>
+              Static Maps
+          </div>
+          <div class="radio">
             <input type="radio" name="doc_type" value="other"{% ifequal document.doc_type "other" %} checked="checked"{% endifequal %}>
               Other
           </div>
